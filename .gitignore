@@ -2,3 +2,4 @@ backend/.env
 .DS_Store
 backend/__pycache__/main.cpython-312.pyc
 backend/devops-user_accessKeys.csv
+deployment/deployment-guide.md
