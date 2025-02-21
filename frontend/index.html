@@ -1,268 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Car Showcase - Filter & Sort</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background-color: #f4f4f4;
-    }
-    .container {
-      width: 90%;
-      margin: auto;
-      padding: 20px;
-      background: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    h1 { color: #333; }
-    .filters {
-      display: flex; flex-wrap: wrap; justify-content: center;
-      gap: 10px; margin-bottom: 20px;
-    }
-    select, input {
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-    .search-btn, .reset-btn {
-      padding: 10px 15px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-    .search-btn {
-      background: blue; color: white;
-    }
-    .reset-btn {
-      background: red; color: white;
-    }
-    .car-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .car-card {
-      background: white;
-      padding: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      text-align: center;
-    }
-    .car-card img {
-      width: 100%;
-      border-radius: 10px;
-    }
-    /* Optional: style for the text search input */
-    #nameSearch {
-      width: 200px;
-    }
-  </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Car Price Estimator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Car Price Estimator</h1>
+    </header>
+    <main>
+      <form id="filterForm">
+        <fieldset>
+          <legend>Basic Filters</legend>
+          <div class="form-group">
+            <label for="brand">Brand</label>
+            <select id="brand" name="brand">
+              <option value="" disabled selected>-- Select Brand --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="model">Model</label>
+            <select id="model" name="model">
+              <option value="" disabled selected>-- Select Model --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="year">Year</label>
+            <select id="year" name="year">
+              <option value="" disabled selected>-- Select Year --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fuel_type">Fuel Type</label>
+            <select id="fuel_type" name="fuel_type">
+              <option value="" disabled selected>-- Select Fuel Type --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="hand_num">Hand Number</label>
+            <select id="hand_num" name="hand_num">
+              <option value="" disabled selected>
+                -- Select Hand Number --
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="brand_group">Brand Group</label>
+            <select id="brand_group" name="brand_group">
+              <option value="" disabled selected>
+                -- Select Brand Group --
+              </option>
+            </select>
+          </div>
+        </fieldset>
 
-<div class="container">
-  <h1>Car Showcase - Filter & Sort</h1>
+        <fieldset>
+          <legend>Additional Features</legend>
+          <!-- Additional features use fixed Yes/No options -->
+          <div class="form-group">
+            <label for="magnesium_wheels">Magnesium Wheels</label>
+            <select id="magnesium_wheels" name="magnesium_wheels">
+              <option value="" disabled selected>-- Select --</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="distance_control">Distance Control</label>
+            <select id="distance_control" name="distance_control">
+              <option value="" disabled selected>-- Select --</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="economical">Economical</label>
+            <select id="economical" name="economical">
+              <option value="" disabled selected>-- Select --</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="adaptive_cruise_control">Adaptive Cruise Control</label>
+            <select id="adaptive_cruise_control" name="adaptive_cruise_control">
+              <option value="" disabled selected>-- Select --</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cruise_control">Cruise Control</label>
+            <select id="cruise_control" name="cruise_control">
+              <option value="" disabled selected>-- Select --</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="four_wheel_drive">Four Wheel Drive</label>
+            <select id="four_wheel_drive" name="four_wheel_drive">
+              <option value="" disabled selected>-- Select --</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+        </fieldset>
 
-  <!-- Filters Row -->
-  <div class="filters">
-    <select id="brandFilter">
-      <option value="">Select Brand</option>
-    </select>
-    <select id="fuelFilter">
-      <option value="">Select Fuel Type</option>
-    </select>
-    <select id="yearFilter">
-      <option value="">Select Year</option>
-    </select>
-    <input type="number" id="minPrice" placeholder="Min Price ($)" />
-    <input type="number" id="maxPrice" placeholder="Max Price ($)" />
-    <input type="number" id="minHP" placeholder="Min Horse Power" />
-    <input type="number" id="maxHP" placeholder="Max Horse Power" />
-    <select id="fourWheelDrive">
-      <option value="">4x4</option>
-      <option value="Yes">Yes</option>
-      <option value="No">No</option>
-    </select>
-    <select id="sortBy">
-      <option value="">Sort By</option>
-      <option value="priceLow">Price: Low to High</option>
-      <option value="priceHigh">Price: High to Low</option>
-      <option value="yearNew">Year: Newest to Oldest</option>
-      <option value="yearOld">Year: Oldest to Newest</option>
-      <option value="hpLow">Horse Power: Low to High</option>
-      <option value="hpHigh">Horse Power: High to Low</option>
-    </select>
+        <fieldset>
+          <legend>Performance Options</legend>
+          <div class="form-group">
+            <label for="min_horse_power">Min Horse Power</label>
+            <input
+              type="number"
+              id="min_horse_power"
+              name="min_horse_power"
+              placeholder="e.g., 80"
+            />
+          </div>
+          <div class="form-group">
+            <label for="max_horse_power">Max Horse Power</label>
+            <input
+              type="number"
+              id="max_horse_power"
+              name="max_horse_power"
+              placeholder="e.g., 400"
+            />
+          </div>
+          <div class="form-group">
+            <label for="min_engine_volume">Min Engine Volume</label>
+            <input
+              type="number"
+              step="0.1"
+              id="min_engine_volume"
+              name="min_engine_volume"
+              placeholder="e.g., 1.0"
+            />
+          </div>
+          <div class="form-group">
+            <label for="max_engine_volume">Max Engine Volume</label>
+            <input
+              type="number"
+              step="0.1"
+              id="max_engine_volume"
+              name="max_engine_volume"
+              placeholder="e.g., 6.0"
+            />
+          </div>
+        </fieldset>
 
-    <button class="search-btn" onclick="filterCars()">Search</button>
-    <button class="reset-btn" onclick="resetFilters()">Reset Filters</button>
-  </div>
+        <button type="button" id="estimateBtn">Price Estimate</button>
+      </form>
 
-  <!-- Optional: Add a text box for local "Search by Name" -->
-  <div style="margin-bottom: 20px;">
-    <input 
-      type="text" 
-      id="nameSearch" 
-      placeholder="Search by brand/model..." 
-      onkeyup="searchCar()" 
-    />
-  </div>
+      <div id="priceEstimate" class="result"></div>
+    </main>
 
-  <!-- Car Grid -->
-  <div class="car-grid" id="carGrid"></div>
-</div>
-
-<script>
-  // ---------------------------
-  // 1) SERVER-SIDE FILTER LOGIC
-  // ---------------------------
-
-  // Fetch from the backend using certain filters (brand, year, max_price).
-  async function filterCars() {
-    const brand = document.getElementById("brandFilter").value;
-    const year = document.getElementById("yearFilter").value;
-    const maxPrice = document.getElementById("maxPrice").value;
-
-    // Build query string from filters
-    let query = [];
-    if (brand) query.push(`brand=${encodeURIComponent(brand)}`);
-    if (year) query.push(`year=${encodeURIComponent(year)}`);
-    if (maxPrice) query.push(`max_price=${encodeURIComponent(maxPrice)}`);
-    const queryString = query.length ? `?${query.join("&")}` : "";
-
-    try {
-      // Fetch filtered cars from the backend
-      const response = await fetch(`http://127.0.0.1:8000/cars${queryString}`);
-      const data = await response.json();
-      loadCars(data.cars);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-
-  // Reset filters and fetch all cars from the backend
-  async function resetFilters() {
-    document.querySelectorAll("select, input").forEach(e => (e.value = ""));
-    try {
-      const response = await fetch("http://127.0.0.1:8000/cars");
-      const data = await response.json();
-      loadCars(data.cars);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-
-  // ---------------------------
-  // 2) RENDER LOGIC
-  // ---------------------------
-
-  // Display an array of car objects in the grid
-  function loadCars(carArray) {
-    const grid = document.getElementById("carGrid");
-    grid.innerHTML = "";
-
-    if (!carArray || carArray.length === 0) {
-      grid.innerHTML = "<p>No cars found matching the criteria.</p>";
-      return;
-    }
-
-    carArray.forEach(car => {
-      const card = `
-        <div class="car-card">
-          <img src="${car.image || "https://via.placeholder.com/200"}" alt="${car.brand}">
-          <h3>${car.brand} ${car.model}</h3>
-          <p>Year: ${car.year}</p>
-          <p>Fuel: ${car.fuel_type || car.fuel || "Unknown"}</p>
-          <p>Price: $${(car.price || 0).toLocaleString()}</p>
-          <p>Horse Power: ${car.horse_power || 0}</p>
-          <p>4x4: ${car.four_wheel_drive ? "Yes" : "No"}</p>
-        </div>`;
-      grid.innerHTML += card;
-    });
-
-    // After loading cars, optionally run the local search filter
-    // if there's something typed in #nameSearch
-    searchCar();
-  }
-
-  // ---------------------------
-  // 3) CLIENT-SIDE SEARCH LOGIC
-  // ---------------------------
-
-  // Filter loaded cars by brand/model text in the <h3> element
-  function searchCar() {
-    let filter = document.getElementById("nameSearch").value.toLowerCase();
-    let cards = document.querySelectorAll("#carGrid .car-card");
-
-    cards.forEach(card => {
-      // brand + model text is inside the <h3> tag
-      let brandModelText = card.querySelector("h3").textContent.toLowerCase();
-      card.style.display = brandModelText.includes(filter) ? "" : "none";
-    });
-  }
-
-  // ---------------------------
-  // 4) ON PAGE LOAD
-  // ---------------------------
-  window.onload = async function() {
-    try {
-      // Fetch all cars from the backend initially
-      const response = await fetch("http://127.0.0.1:8000/cars");
-      const data = await response.json();
-      loadCars(data.cars);
-
-      // Optionally populate brand/year/fuel filters from the data
-      populateFiltersFromData(data.cars);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  // Populate brand/year/fuel dropdowns from the fetched data
-  function populateFiltersFromData(carArray) {
-    // Extract unique brand/year/fuel from the data
-    const brands = new Set();
-    const years = new Set();
-    const fuels = new Set();
-
-    carArray.forEach(car => {
-      if (car.brand) brands.add(car.brand);
-      if (car.year) years.add(car.year);
-      if (car.fuel_type) fuels.add(car.fuel_type);
-    });
-
-    // Fill brandFilter
-    const brandSelect = document.getElementById("brandFilter");
-    brands.forEach(b => {
-      let opt = document.createElement("option");
-      opt.value = b;
-      opt.textContent = b;
-      brandSelect.appendChild(opt);
-    });
-
-    // Fill yearFilter
-    const yearSelect = document.getElementById("yearFilter");
-    Array.from(years).sort((a,b) => a - b).forEach(y => {
-      let opt = document.createElement("option");
-      opt.value = y;
-      opt.textContent = y;
-      yearSelect.appendChild(opt);
-    });
-
-    // Fill fuelFilter
-    const fuelSelect = document.getElementById("fuelFilter");
-    fuels.forEach(f => {
-      let opt = document.createElement("option");
-      opt.value = f;
-      opt.textContent = f;
-      fuelSelect.appendChild(opt);
-    });
-  }
-</script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
