@@ -1,131 +1,136 @@
-// Set the backend API base URL
 const API_BASE = "http://127.0.0.1:8000";
 
-// List of basic dropdown filters (dynamic options)
-const dropdownFilters = [
-  "brand",
-  "model",
-  "year",
-  "fuel_type",
-  "hand_num",
-  "brand_group",
-];
-
-// List of additional feature filters (static yes/no) that are only included after user interaction
-const additionalFeatures = [
-  "magnesium_wheels",
-  "distance_control",
-  "economical",
-  "adaptive_cruise_control",
-  "cruise_control",
-  "four_wheel_drive",
-];
-
-// Debounce helper: delays execution until no changes occur for the specified delay
-function debounce(func, delay) {
-  let timeout;
-  return function (...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), delay);
-  };
-}
-
-// Helper: Get current filter values.
-// Only include a value if the field has been touched and a valid selection exists.
-function getCurrentFilters() {
-  const filters = {};
-
-  // Process basic dynamic filters
-  dropdownFilters.forEach((filter) => {
-    const el = document.getElementById(filter);
-    if (el && el.value !== "" && el.getAttribute("data-touched") === "true") {
-      filters[filter] = el.value;
-    }
+// Helper function to show a specific step (1-indexed)
+function showStep(stepNumber) {
+  const steps = document.querySelectorAll(".step");
+  steps.forEach((step, index) => {
+    step.style.display = index === stepNumber - 1 ? "block" : "none";
   });
-
-  // Process additional features (only if touched)
-  additionalFeatures.forEach((filter) => {
-    const el = document.getElementById(filter);
-    if (el && el.value !== "" && el.getAttribute("data-touched") === "true") {
-      filters[filter] = el.value;
-    }
-  });
-
-  return filters;
 }
 
-// Show a temporary loading indicator in a select element
-function showLoading(selectElement) {
-  selectElement.innerHTML = `<option value="" disabled selected>Loading...</option>`;
-}
-
-// Update basic dropdown options from the dynamic-filters API while preserving selections
-async function updateDropdowns() {
-  const filters = getCurrentFilters();
-  const queryParams = new URLSearchParams(filters);
+// STEP 1: Update the Brand dropdown using the dynamic-filters API
+async function updateBrandDropdown() {
   try {
+    const response = await fetch(`${API_BASE}/dynamic-filters`);
+    const data = await response.json();
+    const brandSelect = document.getElementById("brand");
+    let optionsHtml = `<option value="" disabled selected>-- Select Brand --</option>`;
+    if (data.brand && data.brand.length > 0) {
+      data.brand.forEach((item) => {
+        optionsHtml += `<option value="${item}">${item}</option>`;
+      });
+    }
+    brandSelect.innerHTML = optionsHtml;
+  } catch (error) {
+    console.error("Error fetching brands:", error);
+  }
+}
+
+// STEP 2: Update the Model dropdown based on the selected Brand
+async function updateModelDropdown() {
+  const brand = document.getElementById("brand").value;
+  if (!brand) return;
+  try {
+    const queryParams = new URLSearchParams({ brand });
     const response = await fetch(
       `${API_BASE}/dynamic-filters?${queryParams.toString()}`
     );
     const data = await response.json();
-
-    // Update each basic dropdown with returned options
-    dropdownFilters.forEach((filter) => {
-      const select = document.getElementById(filter);
-      if (select) {
-        // Save the current selection if touched
-        const isTouched = select.getAttribute("data-touched") === "true";
-        const currentValue = isTouched ? select.value : "";
-
-        // Show loading indicator while updating
-        showLoading(select);
-
-        // Rebuild the dropdown options with a placeholder
-        // Note: The placeholder is not selectable (disabled)
-        let optionsHtml = `<option value="" disabled>-- Select ${filter.replace(
-          "_",
-          " "
-        )} --</option>`;
-        if (data[filter] && data[filter].length > 0) {
-          data[filter].forEach((item) => {
-            optionsHtml += `<option value="${item}">${item}</option>`;
-          });
-        }
-        select.innerHTML = optionsHtml;
-
-        // Restore previous selection if it still exists among the options
-        if (currentValue !== "") {
-          select.value = currentValue;
-        } else {
-          select.selectedIndex = 0;
-        }
-      }
-    });
-    // Additional features remain static.
+    const modelSelect = document.getElementById("model");
+    let optionsHtml = `<option value="" disabled selected>-- Select Model --</option>`;
+    // Always provide an option to not specify the model
+    optionsHtml += `<option value="none">Not specify</option>`;
+    if (data.model && data.model.length > 0) {
+      data.model.forEach((item) => {
+        optionsHtml += `<option value="${item}">${item}</option>`;
+      });
+    }
+    modelSelect.innerHTML = optionsHtml;
   } catch (error) {
-    console.error("Error updating filters:", error);
+    console.error("Error fetching models:", error);
   }
 }
 
-// Wrap updateDropdowns in a debounce (300ms delay)
-const debouncedUpdateDropdowns = debounce(updateDropdowns, 300);
+// STEP 3: Update additional basic filters (year, fuel_type, hand_num, brand_group)
+// based on selected Brand and Model.
+async function updateStep3Dropdowns() {
+  const brand = document.getElementById("brand").value;
+  const modelVal = document.getElementById("model").value;
+  // Build params object: include model only if it’s not "none"
+  const params = { brand };
+  if (modelVal && modelVal !== "none") {
+    params.model = modelVal;
+  }
+  try {
+    const queryParams = new URLSearchParams(params);
+    const response = await fetch(
+      `${API_BASE}/dynamic-filters?${queryParams.toString()}`
+    );
+    const data = await response.json();
+    const fields = ["year", "fuel_type", "hand_num", "brand_group"];
+    fields.forEach((field) => {
+      const select = document.getElementById(field);
+      let optionsHtml = `<option value="" disabled selected>-- Select ${field.replace(
+        "_",
+        " "
+      )} --</option>`;
+      if (data[field] && data[field].length > 0) {
+        data[field].forEach((item) => {
+          optionsHtml += `<option value="${item}">${item}</option>`;
+        });
+      }
+      select.innerHTML = optionsHtml;
+    });
+  } catch (error) {
+    console.error("Error fetching additional filters:", error);
+  }
+}
 
-// Call price estimate endpoint with current filter values plus performance inputs
+// Collect all filter values and call the estimate-price endpoint
 async function getPriceEstimate() {
-  const params = { ...getCurrentFilters() };
-  // Gather numeric performance inputs (if provided)
-  const numFields = [
-    "min_horse_power",
-    "max_horse_power",
-    "min_engine_volume",
-    "max_engine_volume",
-  ];
-  numFields.forEach((field) => {
+  const params = {};
+  // Step 1: brand is required.
+  params.brand = document.getElementById("brand").value;
+  // Step 2: Include model only if user specified one (omit if "Not specify" is selected)
+  const modelVal = document.getElementById("model").value;
+  if (modelVal && modelVal !== "none") {
+    params.model = modelVal;
+  }
+  // Step 3: Additional basic filters.
+  ["year", "fuel_type", "hand_num", "brand_group"].forEach((field) => {
     const el = document.getElementById(field);
     if (el && el.value !== "") {
       params[field] = el.value;
     }
   });
+  // Optional features.
+  const optionalFeatures = [
+    "magnesium_wheels",
+    "distance_control",
+    "economical",
+    "adaptive_cruise_control",
+    "cruise_control",
+    "four_wheel_drive",
+  ];
+  optionalFeatures.forEach((field) => {
+    const el = document.getElementById(field);
+    if (el && el.value !== "") {
+      params[field] = el.value;
+    }
+  });
+  // Performance specifications.
+  [
+    "min_horse_power",
+    "max_horse_power",
+    "min_engine_volume",
+    "max_engine_volume",
+  ].forEach((field) => {
+    const el = document.getElementById(field);
+    if (el && el.value !== "") {
+      params[field] = el.value;
+    }
+  });
+
   const queryParams = new URLSearchParams(params);
   try {
     const response = await fetch(
@@ -145,34 +150,37 @@ async function getPriceEstimate() {
   }
 }
 
-// Set up event listeners for basic dropdowns to update options dynamically.
-// Mark the field as touched and call the debounced update function.
-dropdownFilters.forEach((filter) => {
-  const el = document.getElementById(filter);
-  if (el) {
-    el.addEventListener("change", () => {
-      el.setAttribute("data-touched", "true");
-      debouncedUpdateDropdowns();
-    });
+// Navigation Event Listeners
+document.getElementById("nextStep1").addEventListener("click", async () => {
+  const brand = document.getElementById("brand").value;
+  if (!brand) {
+    alert("Please select a brand.");
+    return;
   }
+  await updateModelDropdown();
+  showStep(2);
 });
 
-// Set up event listeners for additional features to mark them as touched.
-additionalFeatures.forEach((filter) => {
-  const el = document.getElementById(filter);
-  if (el) {
-    el.addEventListener("focus", () => {
-      if (el.getAttribute("data-touched") !== "true") {
-        el.setAttribute("data-touched", "true");
-      }
-    });
-  }
+document.getElementById("prevStep2").addEventListener("click", () => {
+  showStep(1);
 });
 
-// Set up the Price Estimate button click event
+document.getElementById("nextStep2").addEventListener("click", async () => {
+  // Model is optional; no validation needed.
+  await updateStep3Dropdowns();
+  showStep(3);
+});
+
+document.getElementById("prevStep3").addEventListener("click", () => {
+  showStep(2);
+});
+
 document
   .getElementById("estimateBtn")
   .addEventListener("click", getPriceEstimate);
 
-// On page load, initialize basic dropdowns.
-window.addEventListener("DOMContentLoaded", updateDropdowns);
+// Initialize on page load
+window.addEventListener("DOMContentLoaded", () => {
+  updateBrandDropdown();
+  showStep(1);
+});

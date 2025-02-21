@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Car Price Estimator</title>
+    <title>Car Price Estimator - Multi-Step</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -12,151 +12,177 @@
     </header>
     <main>
       <form id="filterForm">
-        <fieldset>
-          <legend>Basic Filters</legend>
+        <!-- Step 1: Select Brand -->
+        <div id="step1" class="step">
+          <h2>Step 1: Choose Brand</h2>
           <div class="form-group">
             <label for="brand">Brand</label>
             <select id="brand" name="brand">
               <option value="" disabled selected>-- Select Brand --</option>
             </select>
           </div>
+          <button type="button" id="nextStep1">Next</button>
+        </div>
+
+        <!-- Step 2: Select Model (Optional) -->
+        <div id="step2" class="step" style="display: none">
+          <h2>Step 2: Choose Model (Optional)</h2>
           <div class="form-group">
             <label for="model">Model</label>
             <select id="model" name="model">
               <option value="" disabled selected>-- Select Model --</option>
+              <option value="none">Not specify</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="year">Year</label>
-            <select id="year" name="year">
-              <option value="" disabled selected>-- Select Year --</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="fuel_type">Fuel Type</label>
-            <select id="fuel_type" name="fuel_type">
-              <option value="" disabled selected>-- Select Fuel Type --</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="hand_num">Hand Number</label>
-            <select id="hand_num" name="hand_num">
-              <option value="" disabled selected>
-                -- Select Hand Number --
-              </option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="brand_group">Brand Group</label>
-            <select id="brand_group" name="brand_group">
-              <option value="" disabled selected>
-                -- Select Brand Group --
-              </option>
-            </select>
-          </div>
-        </fieldset>
+          <button type="button" id="prevStep2">Previous</button>
+          <button type="button" id="nextStep2">Next</button>
+        </div>
 
-        <fieldset>
-          <legend>Additional Features</legend>
-          <!-- Additional features use fixed Yes/No options -->
-          <div class="form-group">
-            <label for="magnesium_wheels">Magnesium Wheels</label>
-            <select id="magnesium_wheels" name="magnesium_wheels">
-              <option value="" disabled selected>-- Select --</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="distance_control">Distance Control</label>
-            <select id="distance_control" name="distance_control">
-              <option value="" disabled selected>-- Select --</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="economical">Economical</label>
-            <select id="economical" name="economical">
-              <option value="" disabled selected>-- Select --</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="adaptive_cruise_control">Adaptive Cruise Control</label>
-            <select id="adaptive_cruise_control" name="adaptive_cruise_control">
-              <option value="" disabled selected>-- Select --</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="cruise_control">Cruise Control</label>
-            <select id="cruise_control" name="cruise_control">
-              <option value="" disabled selected>-- Select --</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="four_wheel_drive">Four Wheel Drive</label>
-            <select id="four_wheel_drive" name="four_wheel_drive">
-              <option value="" disabled selected>-- Select --</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
-        </fieldset>
+        <!-- Step 3: Additional Filters -->
+        <div id="step3" class="step" style="display: none">
+          <h2>Step 3: Additional Filters</h2>
+          <!-- Basic additional filters -->
+          <fieldset>
+            <legend>Basic Information</legend>
+            <div class="form-group">
+              <label for="year">Year</label>
+              <select id="year" name="year">
+                <option value="" disabled selected>-- Select Year --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="fuel_type">Fuel Type</label>
+              <select id="fuel_type" name="fuel_type">
+                <option value="" disabled selected>
+                  -- Select Fuel Type --
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="hand_num">Hand Number</label>
+              <select id="hand_num" name="hand_num">
+                <option value="" disabled selected>
+                  -- Select Hand Number --
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="brand_group">Brand Group</label>
+              <select id="brand_group" name="brand_group">
+                <option value="" disabled selected>
+                  -- Select Brand Group --
+                </option>
+              </select>
+            </div>
+          </fieldset>
 
-        <fieldset>
-          <legend>Performance Options</legend>
-          <div class="form-group">
-            <label for="min_horse_power">Min Horse Power</label>
-            <input
-              type="number"
-              id="min_horse_power"
-              name="min_horse_power"
-              placeholder="e.g., 80"
-            />
-          </div>
-          <div class="form-group">
-            <label for="max_horse_power">Max Horse Power</label>
-            <input
-              type="number"
-              id="max_horse_power"
-              name="max_horse_power"
-              placeholder="e.g., 400"
-            />
-          </div>
-          <div class="form-group">
-            <label for="min_engine_volume">Min Engine Volume</label>
-            <input
-              type="number"
-              step="0.1"
-              id="min_engine_volume"
-              name="min_engine_volume"
-              placeholder="e.g., 1.0"
-            />
-          </div>
-          <div class="form-group">
-            <label for="max_engine_volume">Max Engine Volume</label>
-            <input
-              type="number"
-              step="0.1"
-              id="max_engine_volume"
-              name="max_engine_volume"
-              placeholder="e.g., 6.0"
-            />
-          </div>
-        </fieldset>
+          <!-- Optional Features -->
+          <fieldset>
+            <legend>Optional Features</legend>
+            <div class="form-group">
+              <label for="magnesium_wheels">Magnesium Wheels</label>
+              <select id="magnesium_wheels" name="magnesium_wheels">
+                <option value="" disabled selected>-- Select --</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="distance_control">Distance Control</label>
+              <select id="distance_control" name="distance_control">
+                <option value="" disabled selected>-- Select --</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="economical">Economical</label>
+              <select id="economical" name="economical">
+                <option value="" disabled selected>-- Select --</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="adaptive_cruise_control"
+                >Adaptive Cruise Control</label
+              >
+              <select
+                id="adaptive_cruise_control"
+                name="adaptive_cruise_control"
+              >
+                <option value="" disabled selected>-- Select --</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cruise_control">Cruise Control</label>
+              <select id="cruise_control" name="cruise_control">
+                <option value="" disabled selected>-- Select --</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="four_wheel_drive">Four Wheel Drive</label>
+              <select id="four_wheel_drive" name="four_wheel_drive">
+                <option value="" disabled selected>-- Select --</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+          </fieldset>
 
-        <button type="button" id="estimateBtn">Price Estimate</button>
+          <!-- Performance Specifications -->
+          <fieldset>
+            <legend>Performance Specifications</legend>
+            <div class="form-group">
+              <label for="min_horse_power">Min Horse Power</label>
+              <input
+                type="number"
+                id="min_horse_power"
+                name="min_horse_power"
+                placeholder="e.g., 80"
+              />
+            </div>
+            <div class="form-group">
+              <label for="max_horse_power">Max Horse Power</label>
+              <input
+                type="number"
+                id="max_horse_power"
+                name="max_horse_power"
+                placeholder="e.g., 400"
+              />
+            </div>
+            <div class="form-group">
+              <label for="min_engine_volume">Min Engine Volume</label>
+              <input
+                type="number"
+                step="0.1"
+                id="min_engine_volume"
+                name="min_engine_volume"
+                placeholder="e.g., 1.0"
+              />
+            </div>
+            <div class="form-group">
+              <label for="max_engine_volume">Max Engine Volume</label>
+              <input
+                type="number"
+                step="0.1"
+                id="max_engine_volume"
+                name="max_engine_volume"
+                placeholder="e.g., 6.0"
+              />
+            </div>
+          </fieldset>
+          <button type="button" id="prevStep3">Previous</button>
+          <button type="button" id="estimateBtn">Price Estimate</button>
+        </div>
       </form>
 
       <div id="priceEstimate" class="result"></div>
     </main>
-
     <script src="script.js"></script>
   </body>
 </html>
