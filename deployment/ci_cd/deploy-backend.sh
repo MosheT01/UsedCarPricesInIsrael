@@ -25,17 +25,36 @@ cd "$(git rev-parse --show-toplevel)/deployment" || exit 1
 echo "🚀 Updating Kubernetes deployment..."
 aws eks --region eu-north-1 update-kubeconfig --name usedcar-cluster
 
-# ✅ NEW: Apply the updated deployment file to ensure health checks are updated
+# ✅ Apply the latest Kubernetes deployment file
 echo "🛠️ Applying the latest Kubernetes Deployment..."
 kubectl delete deployment usedcar-backend --ignore-not-found=true
 kubectl apply -f backend-deployment.yaml
 
-# ✅ NEW: Ensure rollout completes successfully before proceeding
+# ✅ Ensure rollout completes successfully before proceeding
 echo "🚀 Waiting for rollout to complete..."
-kubectl rollout status deployment/usedcar-backend
+if ! kubectl rollout status deployment/usedcar-backend; then
+    echo "❌ Deployment failed! Rolling back..."
+    kubectl rollout undo deployment usedcar-backend
+    exit 1
+fi
 
-# ✅ NEW: Verify pod status to confirm correct health check configuration
+# ✅ Verify pod status to confirm correct health check configuration
 echo "🔍 Verifying pod details..."
 kubectl describe pod $(kubectl get pod -l app=usedcar-backend -o jsonpath="{.items[0].metadata.name}")
 
-echo "✅ Deployment successfully updated!"
+# ✅ Retrieve logs in case of debugging needs
+echo "📜 Fetching latest logs from the backend pod..."
+kubectl logs -l app=usedcar-backend --tail=50
+
+# ✅ Post-deployment smoke test to check if service is reachable
+echo "🔍 Running post-deployment smoke test..."
+SERVICE_HOST=$(kubectl get svc backend-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+if curl -f "http://$SERVICE_HOST/health"; then
+    echo "✅ Service is up and running!"
+else
+    echo "❌ Service health check failed! Rolling back..."
+    kubectl rollout undo deployment usedcar-backend
+    exit 1
+fi
+
+echo "✅ Backend deployment complete!"

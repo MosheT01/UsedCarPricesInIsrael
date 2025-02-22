@@ -44,7 +44,7 @@ spec:
               port: 8000
             initialDelaySeconds: 30 # Delay first check for 30 seconds
             timeoutSeconds: 3
-            periodSeconds: 3600 # ✅ Check every 1 hour (3600 seconds)
+            periodSeconds: 30 
             failureThreshold: 3 # Allow 3 failures before restart
 
           readinessProbe:
@@ -53,7 +53,7 @@ spec:
               port: 8000
             initialDelaySeconds: 20 # Delay readiness check for 20 seconds
             timeoutSeconds: 3
-            periodSeconds: 3600 # ✅ Check every 1 hour (3600 seconds)
+            periodSeconds: 30 
             failureThreshold: 3 # Allow 3 failures before marking as "Not Ready"
 
 ---
