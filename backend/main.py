@@ -161,3 +161,8 @@ def estimate_price(
         "min_price": result["min_price"],
         "max_price": result["max_price"]
     }
+
+# ✅ API Endpoint for to check the health of the API
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
