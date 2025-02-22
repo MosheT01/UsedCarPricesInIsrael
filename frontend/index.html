@@ -11,6 +11,7 @@
     />
     <!-- Link to CSS -->
     <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   </head>
   <body>
     <!-- Particle Background -->
@@ -30,7 +31,9 @@
           <div id="step1" class="step active">
             <h2>Step 1: Choose Brand</h2>
             <div class="form-group">
-              <label for="brand" data-tooltip="Select your car's brand">Brand</label>
+              <label for="brand" data-tooltip="Select your car's brand"
+                >Brand</label
+              >
               <select id="brand" name="brand">
                 <option value="" disabled selected>-- Select Brand --</option>
               </select>
@@ -42,7 +45,11 @@
           <div id="step2" class="step">
             <h2>Step 2: Choose Model (Optional)</h2>
             <div class="form-group">
-              <label for="model" data-tooltip="Select your car's model (optional)">Model</label>
+              <label
+                for="model"
+                data-tooltip="Select your car's model (optional)"
+                >Model</label
+              >
               <select id="model" name="model">
                 <option value="" disabled selected>-- Select Model --</option>
                 <option value="none">Not specify</option>
@@ -59,40 +66,61 @@
             <fieldset>
               <legend>Basic Information</legend>
               <div class="form-group">
-                <label for="year" data-tooltip="Select the manufacturing year">Year</label>
+                <label for="year" data-tooltip="Select the manufacturing year"
+                  >Year</label
+                >
                 <select id="year" name="year">
                   <option value="" disabled selected>-- Select Year --</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="fuel_type" data-tooltip="Choose the fuel type">Fuel Type</label>
+                <label for="fuel_type" data-tooltip="Choose the fuel type"
+                  >Fuel Type</label
+                >
                 <select id="fuel_type" name="fuel_type">
-                  <option value="" disabled selected>-- Select Fuel Type --</option>
+                  <option value="" disabled selected>
+                    -- Select Fuel Type --
+                  </option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="hand_num" data-tooltip="Select the hand number">Hand Number</label>
+                <label for="hand_num" data-tooltip="Select the hand number"
+                  >Hand Number</label
+                >
                 <select id="hand_num" name="hand_num">
-                  <option value="" disabled selected>-- Select Hand Number --</option>
+                  <option value="" disabled selected>
+                    -- Select Hand Number --
+                  </option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="brand_group" data-tooltip="Choose the brand group">Brand Group</label>
+                <label for="brand_group" data-tooltip="Choose the brand group"
+                  >Brand Group</label
+                >
                 <select id="brand_group" name="brand_group">
-                  <option value="" disabled selected>-- Select Brand Group --</option>
+                  <option value="" disabled selected>
+                    -- Select Brand Group --
+                  </option>
                 </select>
               </div>
             </fieldset>
 
             <!-- Optional Features (collapsible) -->
             <fieldset id="optionalFeatures" class="collapsible">
-              <legend class="collapsible-legend" data-tooltip="Click to toggle additional features">
+              <legend
+                class="collapsible-legend"
+                data-tooltip="Click to toggle additional features"
+              >
                 Optional Features
                 <span class="arrow"></span>
               </legend>
               <div class="collapsible-content">
                 <div class="form-group">
-                  <label for="magnesium_wheels" data-tooltip="Does it have magnesium wheels?">Magnesium Wheels</label>
+                  <label
+                    for="magnesium_wheels"
+                    data-tooltip="Does it have magnesium wheels?"
+                    >Magnesium Wheels</label
+                  >
                   <select id="magnesium_wheels" name="magnesium_wheels">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
@@ -100,7 +128,11 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="distance_control" data-tooltip="Does it include distance control?">Distance Control</label>
+                  <label
+                    for="distance_control"
+                    data-tooltip="Does it include distance control?"
+                    >Distance Control</label
+                  >
                   <select id="distance_control" name="distance_control">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
@@ -108,7 +140,9 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="economical" data-tooltip="Is it economical?">Economical</label>
+                  <label for="economical" data-tooltip="Is it economical?"
+                    >Economical</label
+                  >
                   <select id="economical" name="economical">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
@@ -116,15 +150,26 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="adaptive_cruise_control" data-tooltip="Does it have adaptive cruise control?">Adaptive Cruise Control</label>
-                  <select id="adaptive_cruise_control" name="adaptive_cruise_control">
+                  <label
+                    for="adaptive_cruise_control"
+                    data-tooltip="Does it have adaptive cruise control?"
+                    >Adaptive Cruise Control</label
+                  >
+                  <select
+                    id="adaptive_cruise_control"
+                    name="adaptive_cruise_control"
+                  >
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
                     <option value="0">No</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="cruise_control" data-tooltip="Does it have cruise control?">Cruise Control</label>
+                  <label
+                    for="cruise_control"
+                    data-tooltip="Does it have cruise control?"
+                    >Cruise Control</label
+                  >
                   <select id="cruise_control" name="cruise_control">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
@@ -132,7 +177,11 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="four_wheel_drive" data-tooltip="Is it four wheel drive?">Four Wheel Drive</label>
+                  <label
+                    for="four_wheel_drive"
+                    data-tooltip="Is it four wheel drive?"
+                    >Four Wheel Drive</label
+                  >
                   <select id="four_wheel_drive" name="four_wheel_drive">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
@@ -144,41 +193,90 @@
 
             <!-- Performance Specifications (collapsible) -->
             <fieldset id="performanceSpecs" class="collapsible">
-              <legend class="collapsible-legend" data-tooltip="Click to toggle performance specs">
+              <legend
+                class="collapsible-legend"
+                data-tooltip="Click to toggle performance specs"
+              >
                 Performance Specifications
                 <span class="arrow"></span>
               </legend>
               <div class="collapsible-content">
                 <div class="form-group">
-                  <label for="min_horse_power" data-tooltip="Minimum horse power">Min Horse Power</label>
-                  <input type="number" id="min_horse_power" name="min_horse_power" placeholder="e.g., 80" />
+                  <label
+                    for="min_horse_power"
+                    data-tooltip="Minimum horse power"
+                    >Min Horse Power</label
+                  >
+                  <input
+                    type="number"
+                    id="min_horse_power"
+                    name="min_horse_power"
+                    placeholder="e.g., 80"
+                  />
                 </div>
                 <div class="form-group">
-                  <label for="max_horse_power" data-tooltip="Maximum horse power">Max Horse Power</label>
-                  <input type="number" id="max_horse_power" name="max_horse_power" placeholder="e.g., 400" />
+                  <label
+                    for="max_horse_power"
+                    data-tooltip="Maximum horse power"
+                    >Max Horse Power</label
+                  >
+                  <input
+                    type="number"
+                    id="max_horse_power"
+                    name="max_horse_power"
+                    placeholder="e.g., 400"
+                  />
                 </div>
                 <div class="form-group">
-                  <label for="min_engine_volume" data-tooltip="Minimum engine volume">Min Engine Volume</label>
-                  <input type="number" step="0.1" id="min_engine_volume" name="min_engine_volume" placeholder="e.g., 1.0" />
+                  <label
+                    for="min_engine_volume"
+                    data-tooltip="Minimum engine volume"
+                    >Min Engine Volume</label
+                  >
+                  <input
+                    type="number"
+                    step="0.1"
+                    id="min_engine_volume"
+                    name="min_engine_volume"
+                    placeholder="e.g., 1.0"
+                  />
                 </div>
                 <div class="form-group">
-                  <label for="max_engine_volume" data-tooltip="Maximum engine volume">Max Engine Volume</label>
-                  <input type="number" step="0.1" id="max_engine_volume" name="max_engine_volume" placeholder="e.g., 6.0" />
+                  <label
+                    for="max_engine_volume"
+                    data-tooltip="Maximum engine volume"
+                    >Max Engine Volume</label
+                  >
+                  <input
+                    type="number"
+                    step="0.1"
+                    id="max_engine_volume"
+                    name="max_engine_volume"
+                    placeholder="e.g., 6.0"
+                  />
                 </div>
               </div>
             </fieldset>
 
             <button type="button" id="prevStep3">Previous</button>
-            <button type="button" id="estimateBtn" data-tooltip="Click to get estimated price">Price Estimate</button>
+            <button
+              type="button"
+              id="estimateBtn"
+              data-tooltip="Click to get estimated price"
+            >
+              Price Estimate
+            </button>
           </div>
         </form>
       </div>
       <!-- Modal for Price Estimate -->
-      <div id="priceEstimate" class="result" style="display:none;"></div>
+      <div id="priceEstimate" class="result" style="display: none"></div>
     </main>
 
     <!-- Chat Assistant Button & Panel -->
-    <div id="chatButton" class="chat-button" data-tooltip="Chat with us">Chat Assistant</div>
+    <div id="chatButton" class="chat-button" data-tooltip="Chat with us">
+      Chat Assistant
+    </div>
     <div id="chatAssistant" class="chat-assistant">
       <div class="chat-header">
         <span>Assistant</span>
