@@ -38,18 +38,24 @@ spec:
                 secretKeyRef:
                   name: rds-secret
                   key: database
-          livenessProbe: # ✅ Move inside the container section
+          livenessProbe:
             httpGet:
               path: /health
               port: 8000
-            initialDelaySeconds: 10
-            periodSeconds: 5
-          readinessProbe: # ✅ Move inside the container section
+            initialDelaySeconds: 30 # Delay first check for 30 seconds
+            timeoutSeconds: 3
+            periodSeconds: 3600 # ✅ Check every 1 hour (3600 seconds)
+            failureThreshold: 3 # Allow 3 failures before restart
+
+          readinessProbe:
             httpGet:
               path: /health
               port: 8000
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            initialDelaySeconds: 20 # Delay readiness check for 20 seconds
+            timeoutSeconds: 3
+            periodSeconds: 3600 # ✅ Check every 1 hour (3600 seconds)
+            failureThreshold: 3 # Allow 3 failures before marking as "Not Ready"
+
 ---
 apiVersion: v1
 kind: Service
