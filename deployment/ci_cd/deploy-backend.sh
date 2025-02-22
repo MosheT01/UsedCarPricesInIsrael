@@ -24,6 +24,18 @@ cd "$(git rev-parse --show-toplevel)/deployment" || exit 1
 # Deploy to Kubernetes (EKS)
 echo "🚀 Updating Kubernetes deployment..."
 aws eks --region eu-north-1 update-kubeconfig --name usedcar-cluster
-kubectl set image deployment/usedcar-backend usedcar-backend=440744253098.dkr.ecr.eu-north-1.amazonaws.com/usedcar-backend:latest
 
-echo "✅ Backend deployment complete!"
+# ✅ NEW: Apply the updated deployment file to ensure health checks are updated
+echo "🛠️ Applying the latest Kubernetes Deployment..."
+kubectl delete deployment usedcar-backend --ignore-not-found=true
+kubectl apply -f backend-deployment.yaml
+
+# ✅ NEW: Ensure rollout completes successfully before proceeding
+echo "🚀 Waiting for rollout to complete..."
+kubectl rollout status deployment/usedcar-backend
+
+# ✅ NEW: Verify pod status to confirm correct health check configuration
+echo "🔍 Verifying pod details..."
+kubectl describe pod $(kubectl get pod -l app=usedcar-backend -o jsonpath="{.items[0].metadata.name}")
+
+echo "✅ Deployment successfully updated!"
