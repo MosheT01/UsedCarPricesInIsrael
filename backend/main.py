@@ -1,21 +1,25 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from db import get_db_connection  # Import the DB connection function
+from fastapi import Request, HTTPException
 
 # Initialize FastAPI app
 app = FastAPI()
 
-# Allow CORS for frontend requests
+# Allow only requests from the CloudFront domain
 app.add_middleware(
     CORSMiddleware,
+    #TODO: Update the allowed origins to only allow requests from the CloudFront domain
+    #allow_origins=["https://d25vs314vmlkcr.cloudfront.net"],  # Only allow CloudFront
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
 # ✅ API Endpoint for Fully Dynamic Filters
-@app.get("/dynamic-filters")
+@app.get("/api/dynamic-filters")
 def get_dynamic_filters(
     brand: str = Query(None),
     model: str = Query(None),
@@ -84,7 +88,7 @@ def get_dynamic_filters(
 
     return results
 
-@app.get("/estimate-price")
+@app.get("/api/estimate-price")
 def estimate_price(
     brand: str = Query(None),
     model: str = Query(None),
@@ -161,3 +165,24 @@ def estimate_price(
         "min_price": result["min_price"],
         "max_price": result["max_price"]
     }
+
+# ✅ API Endpoint for to check the health of the API
+@app.get("/api/health")
+async def health_check():
+    return {"status": "ok"}
+
+# Catch-all route to handle all /api/* requests dynamically
+@app.api_route("/api/{proxy+}", methods=["GET", "POST", "PUT", "DELETE"])
+async def catch_all(request: Request):
+    return {"message": f"Handled route {request.url.path}"}
+
+@app.middleware("http")
+async def restrict_to_cloudfront(request: Request, call_next):
+    allowed_origin = "https://d25vs314vmlkcr.cloudfront.net"
+    origin = request.headers.get("origin")
+
+    if origin and origin != allowed_origin:
+        raise HTTPException(status_code=403, detail="Forbidden: Requests must come from CloudFront.")
+
+    response = await call_next(request)
+    return response
