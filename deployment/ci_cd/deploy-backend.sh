@@ -18,8 +18,8 @@ echo "📤 Pushing Docker image to AWS ECR..."
 docker push 440744253098.dkr.ecr.eu-north-1.amazonaws.com/usedcar-backend:latest
 
 # Navigate back to deployment directory
-echo "📂 Returning to project root..."
-cd "$(dirname "$0")"
+echo "📂 Returning to deployment directory..."
+cd "$(dirname "$0")/../.." || exit 1
 
 # Deploy to Kubernetes (EKS)
 echo "🚀 Updating Kubernetes deployment..."
