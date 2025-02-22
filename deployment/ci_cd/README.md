@@ -75,7 +75,7 @@ This script automates:
 
 5. **Post-Deployment Health Check**
    - Retrieves the service hostname.
-   - Runs a **smoke test** (`curl http://<service-url>/health`).
+   - Runs a **smoke test** (`curl http://<service-url>/api/health`).
    - Rolls back the deployment if health check **fails**.
 
 ---
@@ -90,7 +90,7 @@ Defines how the backend is deployed in **AWS EKS**.
 - Uses the latest **Docker image** from AWS ECR.
 - **Environment variables** (DB credentials) are loaded from **Kubernetes Secrets**.
 - **Health checks**:
-  - **Liveness probe**: Ensures the app is running (`/health`).
+  - **Liveness probe**: Ensures the app is running (`/api/health`).
   - **Readiness probe**: Ensures the app is ready to receive traffic.
 
 #### **🔹 Service (`Service` resource)**

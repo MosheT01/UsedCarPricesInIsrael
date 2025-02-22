@@ -15,7 +15,7 @@ app.add_middleware(
 )
 
 # ✅ API Endpoint for Fully Dynamic Filters
-@app.get("/dynamic-filters")
+@app.get("/api/dynamic-filters")
 def get_dynamic_filters(
     brand: str = Query(None),
     model: str = Query(None),
@@ -84,7 +84,7 @@ def get_dynamic_filters(
 
     return results
 
-@app.get("/estimate-price")
+@app.get("/api/estimate-price")
 def estimate_price(
     brand: str = Query(None),
     model: str = Query(None),
@@ -163,6 +163,6 @@ def estimate_price(
     }
 
 # ✅ API Endpoint for to check the health of the API
-@app.get("/health")
+@app.get("/api/health")
 def health_check():
     return {"status": "ok"}

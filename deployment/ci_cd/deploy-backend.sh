@@ -49,7 +49,7 @@ kubectl logs -l app=usedcar-backend --tail=50
 # ✅ Post-deployment smoke test to check if service is reachable
 echo "🔍 Running post-deployment smoke test..."
 SERVICE_HOST=$(kubectl get svc backend-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-if curl -f "http://$SERVICE_HOST/health"; then
+if curl -f "http://$SERVICE_HOST/api/health"; then
     echo "✅ Service is up and running!"
 else
     echo "❌ Service health check failed! Rolling back..."
