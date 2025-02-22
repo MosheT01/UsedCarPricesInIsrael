@@ -25,4 +25,7 @@ jobs:
         run: chmod +x deployment/ci_cd/deploy-frontend.sh
 
       - name: Run Deployment Script
+        env:
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
         run: bash deployment/ci_cd/deploy-frontend.sh
