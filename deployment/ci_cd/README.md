@@ -124,3 +124,115 @@ Defines how the backend is deployed in **AWS EKS**.
 ✅ **AWS Load Balancer** for external access
 
 This ensures a **robust, scalable, and reliable** deployment process for the backend. 🚀
+
+---
+
+## **🌐 CI/CD Pipeline for Deploying Frontend to AWS S3 & CloudFront**
+
+This CI/CD pipeline automates the deployment of the **Used Car Prices in Israel** frontend to **AWS S3 & CloudFront** using **GitHub Actions** and the AWS CLI.
+
+---
+
+## **🔹 Overview**
+
+- **Source Code Repository**: Hosted on **GitHub**.
+- **Static Hosting**: Frontend files are stored on **AWS S3**.
+- **Content Delivery**: Served globally via **AWS CloudFront**.
+- **Cache Invalidation**: Ensures that new frontend versions are immediately available.
+- **Automated Deployment**: GitHub Actions deploys frontend updates upon every push to `main`.
+
+---
+
+## **🛠 CI/CD Workflow Components**
+
+The frontend deployment consists of:
+
+1. **GitHub Actions Workflow (`.github/workflows/deploy-frontend.yml`)**: Automates deployment when code is pushed to `main`.
+2. **Deployment Script (`deploy-frontend.sh`)**: Handles AWS authentication, S3 upload, and CloudFront cache invalidation.
+3. **AWS Infrastructure**:
+   - **S3 Bucket**: Stores the frontend static files.
+   - **CloudFront Distribution**: Distributes content globally with caching.
+
+---
+
+## **📌 Step-by-Step Breakdown**
+
+### **1️⃣ GitHub Actions Workflow (`deploy-frontend.yml`)**
+
+Triggered on a **push to the `main` branch**.
+
+#### **🔹 Steps:**
+
+1. **Check Out Repository**
+
+   - Uses `actions/checkout@v4` to clone the repository.
+
+2. **Set Up AWS CLI**
+
+   - Uses `aws-actions/configure-aws-credentials@v2` to authenticate AWS CLI with stored secrets.
+
+3. **Allow Execution for Deployment Script**
+
+   - Grants execution permission to `deploy-frontend.sh`.
+
+4. **Run Deployment Script**
+   - Executes `deploy-frontend.sh`, which handles the deployment.
+
+---
+
+### **2️⃣ Deployment Script (`deploy-frontend.sh`)**
+
+This script automates:
+
+1. **AWS Authentication**
+
+   - Configures AWS CLI using stored credentials.
+
+2. **Upload Frontend Files to S3**
+
+   - Syncs all frontend files with the S3 bucket.
+   - Deletes outdated files to keep the latest version.
+
+3. **Invalidate CloudFront Cache**
+
+   - Clears cached versions of old frontend files so users see updates immediately.
+
+---
+
+### **3️⃣ AWS Infrastructure Configuration**
+
+#### **🔹 S3 Bucket**
+
+- **Stores static frontend assets** (HTML, CSS, JS).
+- **Public access is disabled**, and CloudFront is used to serve content securely.
+- **Syncs frontend files** upon every deployment.
+
+#### **🔹 CloudFront Distribution**
+
+- **Distributes frontend globally** using AWS edge locations.
+- **Caches content** for performance optimization.
+- **Invalidates cache** on new deployments to show the latest version.
+
+---
+
+## **📌 Summary of Deployment Flow**
+
+1. **Push to `main` branch** triggers GitHub Actions.
+2. **GitHub Actions** authenticates AWS and runs the deployment script.
+3. **Deployment script (`deploy-frontend.sh`)**:
+   - Uploads frontend files to **AWS S3**.
+   - Invalidates **CloudFront cache** to ensure instant updates.
+4. **If successful**, deployment is marked **✅ complete**.
+5. **Users immediately see the latest frontend version** via CloudFront.
+
+---
+
+## **🚀 Key Features**
+
+✅ **Fully Automated** Deployment  
+✅ **Secure Hosting** on AWS S3 (Public Access Disabled)  
+✅ **Global Distribution** via CloudFront  
+✅ **Instant Cache Invalidation** to reflect updates  
+✅ **Scalable & Cost-Effective**
+
+This ensures a **robust, scalable, and efficient frontend deployment process**. 🚀
