@@ -8,22 +8,33 @@
   padding: 0;
 }
 
-/* Body styling with background image & slow hue rotation */
+/* Increase base font size */
 body {
   font-family: 'Roboto', sans-serif;
-  background: url('https://img.freepik.com/free-photo/modern-futuristic-sci-fi-background_35913-2152.jpg?semt=ais_hybrid')
-    no-repeat center center fixed;
+  font-size: 20px;
+  background: url('https://img.freepik.com/free-photo/modern-futuristic-sci-fi-background_35913-2152.jpg?semt=ais_hybrid') no-repeat center center fixed;
   background-size: cover;
   padding: 20px;
   color: #eee;
   transition: background 0.3s, color 0.3s;
   animation: hueRotate 120s linear infinite;
+  cursor: auto;
 }
 
-/* Subtle hue rotation animation */
+/* Hue rotation animation */
 @keyframes hueRotate {
   from { filter: hue-rotate(0deg); }
   to { filter: hue-rotate(360deg); }
+}
+
+/* Particle background styles */
+#particles-js {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
 /* Header styling and dark mode toggle */
@@ -54,7 +65,7 @@ header button#darkModeToggle:hover {
 
 /* Main container */
 main {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -71,7 +82,7 @@ main {
   width: 33%;
   background: linear-gradient(90deg, #00ffff, #00ff99);
   border-radius: 5px;
-  transition: width 0.3s ease;
+  transition: width 0.2s ease;
 }
 
 /* Card container with entrance animation */
@@ -83,13 +94,11 @@ main {
   box-shadow: 0 0 20px #00ffff;
   margin-bottom: 20px;
   transition: transform 0.3s;
-  animation: cardEntrance 0.5s ease-out;
+  animation: cardEntrance 0.3s ease-out;
 }
 .card:hover {
   transform: translateY(-3px);
 }
-
-/* Card entrance animation */
 @keyframes cardEntrance {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -98,20 +107,14 @@ main {
 /* Steps with fade+slide animation */
 .step {
   display: none;
-  animation: fadeIn 0.5s;
+  animation: fadeIn 0.3s;
 }
 .step.active {
   display: block;
 }
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Form group layout */
@@ -132,16 +135,19 @@ main {
   border: 1px solid #555;
   border-radius: 4px;
   color: #eee;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 .form-group input:focus,
 .form-group select:focus {
   border-color: #00ffff;
+  box-shadow: 0 0 8px rgba(0,255,255,0.3);
   outline: none;
 }
 
-/* Button styles */
+/* Button styles with ripple effect */
 button {
+  position: relative;
+  overflow: hidden;
   padding: 10px 20px;
   background: transparent;
   border: 2px solid #00ffff;
@@ -160,6 +166,21 @@ button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(0,255,255,0.4);
 }
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0, 255, 255, 0.5);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+@keyframes ripple {
+  to { transform: scale(4); opacity: 0; }
+}
 
 /* Fieldset styling */
 fieldset {
@@ -174,26 +195,63 @@ legend {
   color: #00ffff;
 }
 
-/* Result display with pop animation */
+/* Modal (Result) styling */
 .result {
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid #00ffff;
-  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #00ffff;
+  padding: 30px;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 22px;
   text-align: center;
   color: #00ffff;
-  margin-bottom: 20px;
+  min-width: 300px;
+  display: none;
+  animation: modalPop 0.5s ease;
 }
-.result.animate {
-  animation: resultPop 0.5s ease-out;
-}
-@keyframes resultPop {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+@keyframes modalPop {
+  from { transform: translate(-50%, -60%) scale(0.9); opacity: 0; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
-/* Collapsible sections (arrow rotates) */
+/* Price text styling inside modal */
+.price-text {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+/* Reset button styling inside modal */
+.reset-btn {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background: #00ffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #000;
+  transition: transform 0.3s;
+}
+.reset-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Hologram effect for result */
+.result.hologram {
+  animation: hologramEffect 1s ease;
+}
+@keyframes hologramEffect {
+  0% { filter: brightness(0.8); }
+  50% { filter: brightness(1.2); }
+  100% { filter: brightness(0.8); }
+}
+
+/* Collapsible sections */
 .collapsible {
   overflow: hidden;
   margin-bottom: 15px;
@@ -221,43 +279,6 @@ legend {
 .collapsible.open .collapsible-content {
   max-height: 1000px;
   opacity: 1;
-}
-
-/* Dark mode */
-body.dark {
-  color: #eee;
-  background: url('https://img.freepik.com/free-photo/modern-empty-room_23-2150528603.jpg?ga=GA1.1.1960400489.1740166306&semt=ais_hybrid')
-    no-repeat center center fixed;
-  background-size: cover;
-}
-body.dark .card {
-  background: rgba(0, 0, 0, 0.9);
-  border: 1px solid #00ffff;
-  box-shadow: 0 0 20px #00ffff;
-}
-body.dark .progress-bar { background: #222; }
-body.dark .progress {
-  background: linear-gradient(90deg, #00ffff, #00ff99);
-}
-body.dark .form-group input,
-body.dark .form-group select {
-  background: transparent;
-  border: 1px solid #555;
-  color: #eee;
-}
-body.dark button {
-  background: transparent;
-  border: 2px solid #00ffff;
-  color: #00ffff;
-}
-body.dark button:hover {
-  background: #00ffff;
-  color: #000;
-}
-body.dark .result {
-  background: rgba(0, 0, 0, 0.9);
-  border-color: #00ffff;
-  color: #00ffff;
 }
 
 /* Chat Assistant (bottom right) */
@@ -329,7 +350,38 @@ body.dark .result {
   color: #eee;
 }
 
-/* 3D Card Tilt on hover */
-.card:hover {
-  transform: none; /* Keep default hover effect simpler, 3D tilt is handled in JS. */
+/* Dark mode */
+body.dark {
+  color: #eee;
+  background: url('https://img.freepik.com/free-photo/modern-empty-room_23-2150528603.jpg?ga=GA1.1.1960400489.1740166306&semt=ais_hybrid') no-repeat center center fixed;
+  background-size: cover;
+}
+body.dark .card {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid #00ffff;
+  box-shadow: 0 0 20px #00ffff;
+}
+body.dark .progress-bar { background: #222; }
+body.dark .progress {
+  background: linear-gradient(90deg, #00ffff, #00ff99);
+}
+body.dark .form-group input,
+body.dark .form-group select {
+  background: transparent;
+  border: 1px solid #555;
+  color: #eee;
+}
+body.dark button {
+  background: transparent;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+}
+body.dark button:hover {
+  background: #00ffff;
+  color: #000;
+}
+body.dark .result {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: #00ffff;
+  color: #00ffff;
 }
