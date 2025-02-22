@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from db import get_db_connection  # Import the DB connection function
 
@@ -164,5 +164,10 @@ def estimate_price(
 
 # ✅ API Endpoint for to check the health of the API
 @app.get("/api/health")
-def health_check():
+async def health_check():
     return {"status": "ok"}
+
+# Catch-all route to handle all /api/* requests dynamically
+@app.api_route("/api/{proxy+}", methods=["GET", "POST", "PUT", "DELETE"])
+async def catch_all(request: Request):
+    return {"message": f"Handled route {request.url.path}"}
