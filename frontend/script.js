@@ -1,5 +1,5 @@
 const API_BASE =
-  "http://k8s-default-backends-459365a4f3-566a6a1612636ad4.elb.eu-north-1.amazonaws.com";
+  "http://k8s-default-backends-459365a4f3-566a6a1612636ad4.elb.eu-north-1.amazonaws.com/api";
 
 // Show a given step (1-based) and update the progress bar
 function showStep(stepNumber) {
@@ -35,7 +35,9 @@ async function updateModelDropdown() {
   if (!brand) return;
   try {
     const queryParams = new URLSearchParams({ brand });
-    const response = await fetch(`${API_BASE}/dynamic-filters?${queryParams.toString()}`);
+    const response = await fetch(
+      `${API_BASE}/dynamic-filters?${queryParams.toString()}`
+    );
     const data = await response.json();
     const modelSelect = document.getElementById("model");
     let optionsHtml = `<option value="" disabled selected>-- Select Model --</option>`;
@@ -61,12 +63,17 @@ async function updateStep3Dropdowns() {
   }
   try {
     const queryParams = new URLSearchParams(params);
-    const response = await fetch(`${API_BASE}/dynamic-filters?${queryParams.toString()}`);
+    const response = await fetch(
+      `${API_BASE}/dynamic-filters?${queryParams.toString()}`
+    );
     const data = await response.json();
     const fields = ["year", "fuel_type", "hand_num", "brand_group"];
     fields.forEach((field) => {
       const select = document.getElementById(field);
-      let optionsHtml = `<option value="" disabled selected>-- Select ${field.replace("_", " ")} --</option>`;
+      let optionsHtml = `<option value="" disabled selected>-- Select ${field.replace(
+        "_",
+        " "
+      )} --</option>`;
       if (data[field] && data[field].length > 0) {
         data[field].forEach((item) => {
           optionsHtml += `<option value="${item}">${item}</option>`;
@@ -125,7 +132,9 @@ async function getPriceEstimate() {
 
   const queryParams = new URLSearchParams(params);
   try {
-    const response = await fetch(`${API_BASE}/estimate-price?${queryParams.toString()}`);
+    const response = await fetch(
+      `${API_BASE}/estimate-price?${queryParams.toString()}`
+    );
     const data = await response.json();
     const resultDiv = document.getElementById("priceEstimate");
     if (data.min_price && data.max_price) {
@@ -165,30 +174,34 @@ document.getElementById("nextStep2").addEventListener("click", async () => {
 document.getElementById("prevStep3").addEventListener("click", () => {
   showStep(2);
 });
-document.getElementById("estimateBtn").addEventListener("click", getPriceEstimate);
+document
+  .getElementById("estimateBtn")
+  .addEventListener("click", getPriceEstimate);
 
 // Dark Mode Toggle
 document.getElementById("darkModeToggle").addEventListener("click", () => {
   document.body.classList.toggle("dark");
   const toggleBtn = document.getElementById("darkModeToggle");
-  toggleBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+  toggleBtn.textContent = document.body.classList.contains("dark")
+    ? "☀️"
+    : "🌙";
 });
 
 // Collapsible toggles
 document
-  .querySelector('#optionalFeatures .collapsible-legend')
-  .addEventListener('click', () => {
-    document.getElementById('optionalFeatures').classList.toggle('open');
+  .querySelector("#optionalFeatures .collapsible-legend")
+  .addEventListener("click", () => {
+    document.getElementById("optionalFeatures").classList.toggle("open");
   });
 document
-  .querySelector('#performanceSpecs .collapsible-legend')
-  .addEventListener('click', () => {
-    document.getElementById('performanceSpecs').classList.toggle('open');
+  .querySelector("#performanceSpecs .collapsible-legend")
+  .addEventListener("click", () => {
+    document.getElementById("performanceSpecs").classList.toggle("open");
   });
 
 // 3D Card Tilt Effect
-const card = document.querySelector('.card');
-card.addEventListener('mousemove', (e) => {
+const card = document.querySelector(".card");
+card.addEventListener("mousemove", (e) => {
   const rect = card.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
@@ -197,10 +210,12 @@ card.addEventListener('mousemove', (e) => {
   const deltaX = (x - midX) / midX;
   const deltaY = (y - midY) / midY;
   const maxTilt = 10;
-  card.style.transform = `perspective(1000px) rotateX(${ -deltaY * maxTilt }deg) rotateY(${ deltaX * maxTilt }deg)`;
+  card.style.transform = `perspective(1000px) rotateX(${
+    -deltaY * maxTilt
+  }deg) rotateY(${deltaX * maxTilt}deg)`;
 });
-card.addEventListener('mouseleave', () => {
-  card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+card.addEventListener("mouseleave", () => {
+  card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
 });
 
 // Chat Assistant
@@ -221,7 +236,8 @@ document.getElementById("chatInput").addEventListener("keydown", (e) => {
       e.target.value = "";
       setTimeout(() => {
         const reply = document.createElement("p");
-        reply.textContent = "Assistant: Let me know if you have any more questions!";
+        reply.textContent =
+          "Assistant: Let me know if you have any more questions!";
         messagesDiv.appendChild(reply);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       }, 800);
