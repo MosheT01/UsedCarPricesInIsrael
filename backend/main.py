@@ -10,8 +10,8 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     #TODO: Update the allowed origins to only allow requests from the CloudFront domain
-    allow_origins=["https://d25vs314vmlkcr.cloudfront.net"],  # Only allow CloudFront
-    #allow_origins=["*"],
+    #allow_origins=["https://d25vs314vmlkcr.cloudfront.net"],  # Only allow CloudFront
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
