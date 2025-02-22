@@ -24,6 +24,14 @@ jobs:
       - name: Allow PowerShell Execution
         run: Set-ExecutionPolicy Unrestricted -Scope Process -Force
 
+      - name: Cache Docker Layers
+        uses: actions/cache@v3
+        with:
+          path: C:\ProgramData\docker\windowsfilter
+          key: ${{ runner.os }}-docker-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
       - name: Run Deployment Script
         run: |
           .\deployment\ci_cd\deploy-backend.ps1
