@@ -22,7 +22,8 @@ jobs:
           aws-region: eu-north-1
 
       - name: Debug AWS Credentials
-        run: aws configure list
+        run: |
+          aws configure list | sed 's/\(access_key\s*\)\(\*\{12\}\)\(.*\)/\1********\3/' | grep -v "secret_key"
 
       - name: Allow Execution for Bash Script
         run: chmod +x deployment/ci_cd/deploy-frontend.sh
