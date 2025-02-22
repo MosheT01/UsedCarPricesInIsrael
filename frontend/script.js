@@ -1,5 +1,4 @@
-const API_BASE =
-  "http://k8s-default-backends-459365a4f3-566a6a1612636ad4.elb.eu-north-1.amazonaws.com";
+const API_BASE = "https://d25vs314vmlkcr.cloudfront.net/api";
 
 // Easing function for smoother animation (easeOutQuad)
 function easeOutQuad(t) {
@@ -40,7 +39,9 @@ async function updateModelDropdown() {
   if (!brand) return;
   try {
     const queryParams = new URLSearchParams({ brand });
-    const response = await fetch(`${API_BASE}/dynamic-filters?${queryParams.toString()}`);
+    const response = await fetch(
+      `${API_BASE}/dynamic-filters?${queryParams.toString()}`
+    );
     const data = await response.json();
     const modelSelect = document.getElementById("model");
     let optionsHtml = `<option value="" disabled selected>-- Select Model --</option>`;
@@ -66,12 +67,17 @@ async function updateStep3Dropdowns() {
   }
   try {
     const queryParams = new URLSearchParams(params);
-    const response = await fetch(`${API_BASE}/dynamic-filters?${queryParams.toString()}`);
+    const response = await fetch(
+      `${API_BASE}/dynamic-filters?${queryParams.toString()}`
+    );
     const data = await response.json();
     const fields = ["year", "fuel_type", "hand_num", "brand_group"];
     fields.forEach((field) => {
       const select = document.getElementById(field);
-      let optionsHtml = `<option value="" disabled selected>-- Select ${field.replace("_", " ")} --</option>`;
+      let optionsHtml = `<option value="" disabled selected>-- Select ${field.replace(
+        "_",
+        " "
+      )} --</option>`;
       if (data[field] && data[field].length > 0) {
         data[field].forEach((item) => {
           optionsHtml += `<option value="${item}">${item}</option>`;
@@ -146,7 +152,9 @@ async function getPriceEstimate() {
   });
   const queryParams = new URLSearchParams(params);
   try {
-    const response = await fetch(`${API_BASE}/estimate-price?${queryParams.toString()}`);
+    const response = await fetch(
+      `${API_BASE}/estimate-price?${queryParams.toString()}`
+    );
     const data = await response.json();
     const resultDiv = document.getElementById("priceEstimate");
     resultDiv.style.display = "block";
@@ -210,7 +218,9 @@ document.getElementById("prevStep3").addEventListener("click", () => {
   document.getElementById("priceEstimate").style.display = "none";
   showStep(2);
 });
-document.getElementById("estimateBtn").addEventListener("click", getPriceEstimate);
+document
+  .getElementById("estimateBtn")
+  .addEventListener("click", getPriceEstimate);
 document.getElementById("brand").addEventListener("change", function () {
   const nextBtn = document.getElementById("nextStep1");
   nextBtn.disabled = !this.value;
@@ -218,14 +228,20 @@ document.getElementById("brand").addEventListener("change", function () {
 document.getElementById("darkModeToggle").addEventListener("click", () => {
   document.body.classList.toggle("dark");
   const toggleBtn = document.getElementById("darkModeToggle");
-  toggleBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+  toggleBtn.textContent = document.body.classList.contains("dark")
+    ? "☀️"
+    : "🌙";
 });
-document.querySelector('#optionalFeatures .collapsible-legend').addEventListener('click', () => {
-  document.getElementById('optionalFeatures').classList.toggle('open');
-});
-document.querySelector('#performanceSpecs .collapsible-legend').addEventListener('click', () => {
-  document.getElementById('performanceSpecs').classList.toggle('open');
-});
+document
+  .querySelector("#optionalFeatures .collapsible-legend")
+  .addEventListener("click", () => {
+    document.getElementById("optionalFeatures").classList.toggle("open");
+  });
+document
+  .querySelector("#performanceSpecs .collapsible-legend")
+  .addEventListener("click", () => {
+    document.getElementById("performanceSpecs").classList.toggle("open");
+  });
 document.getElementById("chatButton").addEventListener("click", () => {
   document.getElementById("chatAssistant").classList.toggle("active");
 });
@@ -243,7 +259,8 @@ document.getElementById("chatInput").addEventListener("keydown", (e) => {
       e.target.value = "";
       setTimeout(() => {
         const reply = document.createElement("p");
-        reply.textContent = "Assistant: Let me know if you have any more questions!";
+        reply.textContent =
+          "Assistant: Let me know if you have any more questions!";
         messagesDiv.appendChild(reply);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       }, 800);
@@ -253,55 +270,55 @@ document.getElementById("chatInput").addEventListener("keydown", (e) => {
 
 // Particle Background Initialization with interactive "space" stars
 particlesJS("particles-js", {
-  "particles": {
-    "number": {
-      "value": 80,
-      "density": {
-        "enable": true,
-        "value_area": 800
-      }
+  particles: {
+    number: {
+      value: 80,
+      density: {
+        enable: true,
+        value_area: 800,
+      },
     },
-    "color": { "value": "#00ffff" },
-    "shape": {
-      "type": "star"
+    color: { value: "#00ffff" },
+    shape: {
+      type: "star",
     },
-    "opacity": {
-      "value": 0.5,
-      "random": false
+    opacity: {
+      value: 0.5,
+      random: false,
     },
-    "size": {
-      "value": 3,
-      "random": true
+    size: {
+      value: 3,
+      random: true,
     },
-    "line_linked": {
-      "enable": true,
-      "distance": 150,
-      "color": "#00ffff",
-      "opacity": 0.4,
-      "width": 1
+    line_linked: {
+      enable: true,
+      distance: 150,
+      color: "#00ffff",
+      opacity: 0.4,
+      width: 1,
     },
-    "move": {
-      "enable": true,
-      "speed": 2,
-      "direction": "none",
-      "random": false,
-      "straight": false,
-      "out_mode": "out",
-      "bounce": false
-    }
+    move: {
+      enable: true,
+      speed: 2,
+      direction: "none",
+      random: false,
+      straight: false,
+      out_mode: "out",
+      bounce: false,
+    },
   },
-  "interactivity": {
-    "detect_on": "canvas",
-    "events": {
-      "onhover": { "enable": true, "mode": "grab" },
-      "onclick": { "enable": true, "mode": "push" }
+  interactivity: {
+    detect_on: "canvas",
+    events: {
+      onhover: { enable: true, mode: "grab" },
+      onclick: { enable: true, mode: "push" },
     },
-    "modes": {
-      "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
-      "push": { "particles_nb": 4 }
-    }
+    modes: {
+      grab: { distance: 140, line_linked: { opacity: 1 } },
+      push: { particles_nb: 4 },
+    },
   },
-  "retina_detect": true
+  retina_detect: true,
 });
 
 // Initialize on page load
