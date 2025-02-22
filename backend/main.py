@@ -10,7 +10,10 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     #TODO: Update the allowed origins to only allow requests from the CloudFront domain
-    allow_origins=["https://d25vs314vmlkcr.cloudfront.net,https://ku55b83500.execute-api.eu-north-1.amazonaws.com"],  # Only allow CloudFront
+    allow_origins=[
+    "https://d25vs314vmlkcr.cloudfront.net",
+    "https://ku55b83500.execute-api.eu-north-1.amazonaws.com"
+    ],
     #allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
@@ -178,11 +181,14 @@ async def catch_all(request: Request):
 
 @app.middleware("http")
 async def restrict_to_cloudfront(request: Request, call_next):
-    allowed_origin = "https://d25vs314vmlkcr.cloudfront.net"
+    allowed_origins = [
+        "https://d25vs314vmlkcr.cloudfront.net",
+        "https://ku55b83500.execute-api.eu-north-1.amazonaws.com"
+    ]
     origin = request.headers.get("origin")
 
-    if origin and origin != allowed_origin:
-        raise HTTPException(status_code=403, detail="Forbidden: Requests must come from CloudFront.")
+    if origin and origin not in allowed_origins:
+        raise HTTPException(status_code=403, detail="Forbidden: Requests must come from an allowed origin.")
 
     response = await call_next(request)
     return response
