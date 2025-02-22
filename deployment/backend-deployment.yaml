@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: usedcar-backend
 spec:
-  replicas: 2 # Number of backend instances
+  replicas: 2
   selector:
     matchLabels:
       app: usedcar-backend
@@ -42,19 +42,19 @@ spec:
             httpGet:
               path: /health
               port: 8000
-            initialDelaySeconds: 30 # Delay first check for 30 seconds
+            initialDelaySeconds: 30
             timeoutSeconds: 3
-            periodSeconds: 30 
-            failureThreshold: 3 # Allow 3 failures before restart
+            periodSeconds: 30
+            failureThreshold: 3
 
           readinessProbe:
             httpGet:
               path: /health
               port: 8000
-            initialDelaySeconds: 20 # Delay readiness check for 20 seconds
+            initialDelaySeconds: 20
             timeoutSeconds: 3
-            periodSeconds: 30 
-            failureThreshold: 3 # Allow 3 failures before marking as "Not Ready"
+            periodSeconds: 30
+            failureThreshold: 3
 
 ---
 apiVersion: v1
@@ -63,11 +63,19 @@ metadata:
   name: backend-service
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:YOUR_ACCOUNT_ID:certificate/YOUR_CERTIFICATE_ID
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
 spec:
   selector:
     app: usedcar-backend
   ports:
     - protocol: TCP
+      port: 443 # Expose HTTPS externally
+      targetPort: 8000 # Backend app listens on port 8000
+      name: https
+    - protocol: TCP
       port: 80
       targetPort: 8000
+      name: http
   type: LoadBalancer
