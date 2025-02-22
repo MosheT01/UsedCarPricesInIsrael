@@ -98,12 +98,8 @@ The pipeline will automatically deploy the latest backend version.
 - [x] Database connected securely to Kubernetes.
 - [x] LoadBalancer setup for external access.
 - [x] GitHub Actions CI/CD pipeline configured.
-- [ ] Frontend development in progress.
+- [x] Frontend development in progress.
 - [ ] Static content deployment to AWS S3 & CloudFront.
-
----
-## 📜 License
-This project is licensed under the MIT License.
 
 ---
 ## 🤝 Contributing
@@ -113,5 +109,7 @@ Pull requests are welcome! Open an issue for feature requests or bug reports.
 ## 📧 Contact
 For any inquiries, please contact:
 - **Developer:** [Mousa Tams](https://github.com/MosheT01)
-- **Repository:** [UsedCarPricesInIsrael](https://github.com/MosheT01/UsedCarPricesInIsrael)
+- **Developer:** [Shadi Kouba](https://github.com/ShadiKouba)
+  
+
 
