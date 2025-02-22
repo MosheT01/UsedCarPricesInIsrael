@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Deploy Backend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # ✅ Switch to Linux-based runner
 
     steps:
       - name: Checkout Repository
@@ -21,18 +21,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
 
-      - name: Allow PowerShell Execution
-        run: Set-ExecutionPolicy Unrestricted -Scope Process -Force
-
-      - name: Cache Docker Layers
-        uses: actions/cache@v3
-        with:
-          path: C:\ProgramData\docker\windowsfilter
-          key: ${{ runner.os }}-docker-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-docker-
+      - name: Allow Execution for Bash Script
+        run: chmod +x deployment/ci_cd/deploy-backend.sh
 
       - name: Run Deployment Script
-        run: |
-          .\deployment\ci_cd\deploy-backend.ps1
-        shell: pwsh
+        run: bash deployment/ci_cd/deploy-backend.sh
