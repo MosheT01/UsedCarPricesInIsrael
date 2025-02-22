@@ -1,4 +1,4 @@
-const API_BASE = "https://d25vs314vmlkcr.cloudfront.net/api";
+const API_BASE = "https://ku55b83500.execute-api.eu-north-1.amazonaws.com/api";
 
 // Easing function for smoother animation (easeOutQuad)
 function easeOutQuad(t) {
