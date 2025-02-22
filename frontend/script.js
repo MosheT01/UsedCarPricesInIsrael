@@ -1,4 +1,5 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE =
+  "http://k8s-default-backends-459365a4f3-566a6a1612636ad4.elb.eu-north-1.amazonaws.com";
 
 // Show a given step (1-based) and update the progress bar
 function showStep(stepNumber) {

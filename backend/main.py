@@ -1,11 +1,6 @@
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
-import mysql.connector
-import os
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
+from db import get_db_connection  # Import the DB connection function
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -18,15 +13,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Function to connect to MySQL
-def get_db_connection():
-    return mysql.connector.connect(
-        host=os.getenv("DB_HOST"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        database=os.getenv("DB_NAME")
-    )
 
 # ✅ API Endpoint for Fully Dynamic Filters
 @app.get("/dynamic-filters")
@@ -148,7 +134,6 @@ def estimate_price(
 
     for field, value in filters.items():
         if value is not None:
-            # Check if the field already includes an inequality operator.
             if field.strip().endswith(">=") or field.strip().endswith("<="):
                 query_conditions.append(f"{field} %s")
             else:
