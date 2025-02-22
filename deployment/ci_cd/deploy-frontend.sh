@@ -1,35 +1,32 @@
 #!/bin/bash
-set -e  # Stop script on error
+set -e  # Exit on error
 
-# Authenticate AWS CLI
 echo "🔑 Authenticating to AWS..."
-aws configure set region eu-north-1
+aws configure list || { echo "❌ AWS CLI authentication failed"; exit 1; }
 
-# Masked Logs to Prevent Secret Exposure
-echo "📝 Using S3 Bucket: [REDACTED]"
-echo "📝 Using CloudFront Distribution ID: [REDACTED]"
+echo "📝 Using S3 Bucket: $S3_BUCKET_NAME"
+echo "📝 Using CloudFront Distribution ID: $CLOUDFRONT_DISTRIBUTION_ID"
 
-# Validate Environment Variables
-if [ -z "$S3_BUCKET_NAME" ]; then
-    echo "❌ Error: S3_BUCKET_NAME is not set!"
-    exit 1
+if [[ -z "$S3_BUCKET_NAME" ]]; then
+  echo "❌ Error: S3_BUCKET_NAME is not set!"
+  exit 1
 fi
 
-if [ -z "$CLOUDFRONT_DISTRIBUTION_ID" ]; then
-    echo "❌ Error: CLOUDFRONT_DISTRIBUTION_ID is not set!"
-    exit 1
+if [[ -z "$CLOUDFRONT_DISTRIBUTION_ID" ]]; then
+  echo "❌ Error: CLOUDFRONT_DISTRIBUTION_ID is not set!"
+  exit 1
 fi
 
-# Navigate to frontend directory
 echo "📂 Navigating to frontend directory..."
-cd "$(dirname "$0")/../../frontend"
+cd "$(dirname "$0")/../../frontend" || { echo "❌ Failed to navigate to frontend directory"; exit 1; }
 
-# Deploy frontend to S3
-echo "🚀 Uploading frontend assets..."
-aws s3 sync . s3://"$S3_BUCKET_NAME" --delete > /dev/null 2>&1
+echo "🚀 Uploading frontend assets to S3..."
+aws s3 sync . s3://$S3_BUCKET_NAME --delete || { echo "❌ S3 Upload Failed"; exit 1; }
 
-# Invalidate CloudFront Cache
 echo "🚀 Requesting CloudFront cache invalidation..."
-aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --paths "/*" > /dev/null 2>&1
+aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --paths "/*" || {
+  echo "❌ CloudFront cache invalidation failed!"
+  exit 254
+}
 
-echo "✅ Frontend deployment complete!"
+echo "✅ Deployment complete!"

@@ -3,7 +3,7 @@ name: Deploy Frontend to AWS S3 & CloudFront
 on:
   push:
     branches:
-      - main # Deploy frontend on push to main
+      - main
 
 jobs:
   deploy:
@@ -20,6 +20,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
+
+      - name: Debug AWS Credentials
+        run: aws configure list
 
       - name: Allow Execution for Bash Script
         run: chmod +x deployment/ci_cd/deploy-frontend.sh
