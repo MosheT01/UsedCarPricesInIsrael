@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Deploy Backend
-    runs-on: ubuntu-latest # ✅ Switch to Linux-based runner
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository

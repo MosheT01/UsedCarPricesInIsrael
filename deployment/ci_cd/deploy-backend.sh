@@ -9,12 +9,10 @@ aws ecr get-login-password --region eu-north-1 | docker login --username AWS --p
 echo "📂 Navigating to backend directory..."
 cd "$(dirname "$0")/../../backend"
 
-# Build and Push Docker Image with Caching
+# Ensure AWS ECR repository is used for caching
 echo "🐳 Building Docker image with cache..."
-docker build --cache-from=usedcar-backend:latest -t usedcar-backend .
-
-echo "🏷️ Tagging Docker image..."
-docker tag usedcar-backend:latest 440744253098.dkr.ecr.eu-north-1.amazonaws.com/usedcar-backend:latest
+docker build --cache-from=440744253098.dkr.ecr.eu-north-1.amazonaws.com/usedcar-backend:latest \
+             -t 440744253098.dkr.ecr.eu-north-1.amazonaws.com/usedcar-backend:latest .
 
 echo "📤 Pushing Docker image to AWS ECR..."
 docker push 440744253098.dkr.ecr.eu-north-1.amazonaws.com/usedcar-backend:latest
