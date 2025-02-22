@@ -1,0 +1,30 @@
+name: Deploy Backend to AWS EKS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Backend
+    runs-on: windows-latest \
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      - name: Allow PowerShell Execution
+        run: Set-ExecutionPolicy Unrestricted -Scope Process -Force
+
+      - name: Run Deployment Script
+        run: |
+          .\deployment\ci_cd\deploy-backend.ps1
+        shell: pwsh
