@@ -177,16 +177,16 @@ async def health_check():
 async def catch_all(request: Request):
     return {"message": f"Handled route {request.url.path}"}
 
-@app.middleware("http")
-async def restrict_to_cloudfront(request: Request, call_next):
-    allowed_origins = [
-        "https://d25vs314vmlkcr.cloudfront.net",
-        "https://ku55b83500.execute-api.eu-north-1.amazonaws.com"
-    ]
-    origin = request.headers.get("origin")
+# @app.middleware("http")
+# async def restrict_to_cloudfront(request: Request, call_next):
+#     allowed_origins = [
+#         "https://d25vs314vmlkcr.cloudfront.net",
+#         "https://ku55b83500.execute-api.eu-north-1.amazonaws.com"
+#     ]
+#     origin = request.headers.get("origin")
 
-    if origin and origin not in allowed_origins:
-        raise HTTPException(status_code=403, detail="Forbidden: Requests must come from an allowed origin.")
+#     if origin and origin not in allowed_origins:
+#         raise HTTPException(status_code=403, detail="Forbidden: Requests must come from an allowed origin.")
 
-    response = await call_next(request)
-    return response
+#     response = await call_next(request)
+#     return response
