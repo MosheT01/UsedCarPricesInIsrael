@@ -12,7 +12,7 @@ app.add_middleware(
     #TODO: Update the allowed origins to only allow requests from the CloudFront domain
     allow_origins=[
     "https://d25vs314vmlkcr.cloudfront.net",
-    "https://ku55b83500.execute-api.eu-north-1.amazonaws.com"
+    "https://ku55b83500.execute-api.eu-north-1.amazonaws.com","*"
     ],
     #allow_origins=["*"],
     allow_credentials=True,
