@@ -10,8 +10,12 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     #TODO: Update the allowed origins to only allow requests from the CloudFront domain
+    # allow_origins=[
+    # "https://d25vs314vmlkcr.cloudfront.net",
+    # "https://ku55b83500.execute-api.eu-north-1.amazonaws.com"
+    # ,"*"# TODO: Update this to only allow requests from the CloudFront domain
+    # ],
     allow_origins=["*"],
-    #allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -177,6 +181,7 @@ async def health_check():
 async def catch_all(request: Request):
     return {"message": f"Handled route {request.url.path}"}
 
+#TODO: uncomment below code restrict requests to only come from the CloudFront domain
 # @app.middleware("http")
 # async def restrict_to_cloudfront(request: Request, call_next):
 #     allowed_origins = [
