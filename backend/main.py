@@ -195,107 +195,31 @@ async def catch_all(request: Request):
 
 #     response = await call_next(request)
 #     return response
-
-@app.get("/api/average-price")
-def average_price(
-    brand: str = Query(None),
-    model: str = Query(None),
-    year: int = Query(None),
-    fuel_type: str = Query(None),
-    hand_num: int = Query(None),
-    magnesium_wheels: int = Query(None),
-    distance_control: int = Query(None),
-    economical: int = Query(None),
-    adaptive_cruise_control: int = Query(None),
-    cruise_control: int = Query(None),
-    four_wheel_drive: int = Query(None),
-    brand_group: str = Query(None),
-    min_horse_power: float = Query(None),
-    max_horse_power: float = Query(None),
-    min_engine_volume: float = Query(None),
-    max_engine_volume: float = Query(None)
-):
-    """
-    Returns the average price of cars matching the selected filters.
-    """
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-
-    filters = {
-        "brand": brand,
-        "model": model,
-        "year": year,
-        "fuel_type": fuel_type,
-        "hand_num": hand_num,
-        "magnesium_wheels": magnesium_wheels,
-        "distance_control": distance_control,
-        "economical": economical,
-        "adaptive_cruise_control": adaptive_cruise_control,
-        "cruise_control": cruise_control,
-        "four_wheel_drive": four_wheel_drive,
-        "brand_group": brand_group,
-        "horse_power >= ": min_horse_power,
-        "horse_power <= ": max_horse_power,
-        "engine_volume >= ": min_engine_volume,
-        "engine_volume <= ": max_engine_volume
-    }
-
-    query_conditions = []
-    params = []
-
-    for field, value in filters.items():
-        if value is not None:
-            if field.strip().endswith(">=") or field.strip().endswith("<="):
-                query_conditions.append(f"{field} %s")
-            else:
-                query_conditions.append(f"{field} = %s")
-            params.append(value)
-
-    where_clause = "WHERE " + " AND ".join(query_conditions) if query_conditions else ""
-
-    query = f"""
-        SELECT AVG(price) AS average_price
-        FROM cars {where_clause}
-    """
-
-    cursor.execute(query, tuple(params))
-    result = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
-
-    # If no cars match the filters, return an error
-    if result["average_price"] is None:
-        return {"message": "No cars found matching the criteria."}
-
-    return {"average_price": result["average_price"]}
-
-# --- Appended Code for Average Price Yearly Endpoint ---
+# --- Appended Code for Yearly Average Price Endpoint ---
 @app.get("/api/average-price-yearly")
 def average_price_yearly(
     brand: str = Query(...),  # Require brand parameter
     model: str = Query(...)   # Require model parameter
 ):
     """
-    Returns the average price for each year for the selected brand and model.
+    Returns the average price for each year for the selected car brand and model.
     """
-    conn = get_db_connection()  # Get a database connection
-    cursor = conn.cursor(dictionary=True)  # Create a cursor that returns dictionaries
+    conn = get_db_connection()                  # Get database connection
+    cursor = conn.cursor(dictionary=True)       # Create cursor for dict results
 
-    # SQL query: group by year and calculate average price for the given brand and model
+    # SQL: Group by year for the chosen brand and model
     query = """
-        SELECT year, AVG(price) as avg_price 
+        SELECT year, AVG(price) as avg_price
         FROM cars
         WHERE brand = %s AND model = %s
         GROUP BY year
         ORDER BY year
     """
-    cursor.execute(query, (brand, model))  # Execute the query with the provided brand and model
-    rows = cursor.fetchall()  # Fetch all resulting rows
-
-    cursor.close()  # Close the cursor
-    conn.close()  # Close the connection
+    cursor.execute(query, (brand, model))        # Execute query with brand and model
+    rows = cursor.fetchall()                      # Fetch all rows
+    cursor.close()                                # Close cursor
+    conn.close()                                  # Close connection
 
     if not rows:
-        return {"message": "No data found for the selected brand and model."}
-    return {"data": rows}  # Return the yearly average prices as JSON
+        return {"message": "No data found for the selected car brand and model."}
+    return {"data": rows}                         # Return the yearly averages
