@@ -194,4 +194,79 @@ async def catch_all(request: Request):
 #         raise HTTPException(status_code=403, detail="Forbidden: Requests must come from an allowed origin.")
 
 #     response = await call_next(request)
-#     return response 
+#     return response
+
+@app.get("/api/average-price")
+def average_price(
+    brand: str = Query(None),
+    model: str = Query(None),
+    year: int = Query(None),
+    fuel_type: str = Query(None),
+    hand_num: int = Query(None),
+    magnesium_wheels: int = Query(None),
+    distance_control: int = Query(None),
+    economical: int = Query(None),
+    adaptive_cruise_control: int = Query(None),
+    cruise_control: int = Query(None),
+    four_wheel_drive: int = Query(None),
+    brand_group: str = Query(None),
+    min_horse_power: float = Query(None),
+    max_horse_power: float = Query(None),
+    min_engine_volume: float = Query(None),
+    max_engine_volume: float = Query(None)
+):
+    """
+    Returns the average price of cars matching the selected filters.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    filters = {
+        "brand": brand,
+        "model": model,
+        "year": year,
+        "fuel_type": fuel_type,
+        "hand_num": hand_num,
+        "magnesium_wheels": magnesium_wheels,
+        "distance_control": distance_control,
+        "economical": economical,
+        "adaptive_cruise_control": adaptive_cruise_control,
+        "cruise_control": cruise_control,
+        "four_wheel_drive": four_wheel_drive,
+        "brand_group": brand_group,
+        "horse_power >= ": min_horse_power,
+        "horse_power <= ": max_horse_power,
+        "engine_volume >= ": min_engine_volume,
+        "engine_volume <= ": max_engine_volume
+    }
+
+    query_conditions = []
+    params = []
+
+    for field, value in filters.items():
+        if value is not None:
+            if field.strip().endswith(">=") or field.strip().endswith("<="):
+                query_conditions.append(f"{field} %s")
+            else:
+                query_conditions.append(f"{field} = %s")
+            params.append(value)
+
+    where_clause = "WHERE " + " AND ".join(query_conditions) if query_conditions else ""
+
+    query = f"""
+        SELECT AVG(price) AS average_price
+        FROM cars {where_clause}
+    """
+
+    cursor.execute(query, tuple(params))
+    result = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    # If no cars match the filters, return an error
+    if result["average_price"] is None:
+        return {"message": "No cars found matching the criteria."}
+
+    return {"average_price": result["average_price"]}
+
