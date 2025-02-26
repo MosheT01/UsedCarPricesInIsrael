@@ -37,18 +37,34 @@ body {
   z-index: -1;
 }
 
-/* Header styling and dark mode toggle */
-header {
-  text-align: center;
-  margin-bottom: 20px;
+/* Header container for title, search icon, and dark mode toggle */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
 }
 header h1 {
-  margin-bottom: 10px;
   font-family: 'Orbitron', sans-serif;
   color: #00ffff;
+  margin-right: 10px;
 }
-header button#darkModeToggle {
+
+/* Search icon button styling */
+#searchIcon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+  outline: none;
+}
+#searchIcon:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+/* Dark mode toggle button */
+#darkModeToggle {
   position: absolute;
   top: 10px;
   right: 20px;
@@ -59,7 +75,7 @@ header button#darkModeToggle {
   transition: transform 0.3s;
   color: #00ffff;
 }
-header button#darkModeToggle:hover {
+#darkModeToggle:hover {
   transform: scale(1.1);
 }
 
@@ -170,17 +186,6 @@ button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-button .ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(0, 255, 255, 0.5);
-  transform: scale(0);
-  animation: ripple 0.6s linear;
-  pointer-events: none;
-}
-@keyframes ripple {
-  to { transform: scale(4); opacity: 0; }
-}
 
 /* Fieldset styling */
 fieldset {
@@ -195,54 +200,21 @@ legend {
   color: #00ffff;
 }
 
-/* Modal (Result) styling */
-.result {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.9);
+/* Inline Average Price Result Styling */
+#priceEstimate {
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
   border: 2px solid #00ffff;
-  padding: 30px;
   border-radius: 8px;
   font-size: 22px;
-  text-align: center;
   color: #00ffff;
-  min-width: 300px;
-  display: none;
-  animation: modalPop 0.5s ease;
-}
-@keyframes modalPop {
-  from { transform: translate(-50%, -60%) scale(0.9); opacity: 0; }
-  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  background: rgba(0, 0, 0, 0.9);
+  max-width: 400px;
 }
 
-/* Price text styling inside modal */
-.price-text {
-  font-size: 26px;
-  margin-bottom: 20px;
-}
-
-/* Reset button styling inside modal */
-.reset-btn {
-  display: block;
-  margin: 20px auto 0;
-  padding: 10px 20px;
-  background: #00ffff;
-  border: none;
-  border-radius: 4px;
-  font-size: 20px;
-  cursor: pointer;
-  color: #000;
-  transition: transform 0.3s;
-}
-.reset-btn:hover {
-  transform: scale(1.05);
-}
-
-/* Hologram effect for result */
-.result.hologram {
+/* Hologram effect for price result */
+.hologram {
   animation: hologramEffect 1s ease;
 }
 @keyframes hologramEffect {
@@ -350,38 +322,98 @@ legend {
   color: #eee;
 }
 
-/* Dark mode */
-body.dark {
-  color: #eee;
-  background: url('https://img.freepik.com/free-photo/modern-empty-room_23-2150528603.jpg?ga=GA1.1.1960400489.1740166306&semt=ais_hybrid') no-repeat center center fixed;
-  background-size: cover;
-}
-body.dark .card {
+/* Chart container with neon frame */
+.chart-container {
+  margin: 20px auto;
+  padding: 20px;
+  border: 2px solid #00ffff;
+  border-radius: 8px;
   background: rgba(0, 0, 0, 0.9);
-  border: 1px solid #00ffff;
+  max-width: 600px;
   box-shadow: 0 0 20px #00ffff;
 }
-body.dark .progress-bar { background: #222; }
-body.dark .progress {
-  background: linear-gradient(90deg, #00ffff, #00ff99);
+
+/* Search Modal styling */
+.modal {
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
 }
-body.dark .form-group input,
-body.dark .form-group select {
-  background: transparent;
+.modal-content {
+  background-color: #000;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #00ffff;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 8px;
+  position: relative;
+}
+.search-modal-content h2 {
+  color: #00ffff;
+  margin-bottom: 10px;
+}
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: #00ffff;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Search input container */
+.search-input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.search-input-container input {
+  flex: 1;
+  padding: 10px;
   border: 1px solid #555;
+  border-radius: 4px;
+  background: transparent;
   color: #eee;
 }
-body.dark button {
+.search-input-container button {
   background: transparent;
-  border: 2px solid #00ffff;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.search-input-container button:hover {
+  transform: scale(1.1);
+}
+
+/* Suggestions dropdown */
+.suggestions {
+  background: #222;
+  border: 1px solid #00ffff;
+  border-radius: 4px;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+.suggestion-item {
+  padding: 8px 10px;
+  cursor: pointer;
   color: #00ffff;
 }
-body.dark button:hover {
+.suggestion-item:hover {
   background: #00ffff;
   color: #000;
 }
-body.dark .result {
-  background: rgba(0, 0, 0, 0.9);
-  border-color: #00ffff;
+
+/* Search results styling */
+.search-results {
+  margin-top: 20px;
   color: #00ffff;
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" /> <!-- Set charset -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" /> <!-- Responsive design -->
     <title>Car Price Estimator - Futuristic UI</title>
     <!-- Google Fonts -->
     <link
@@ -12,15 +12,28 @@
     <!-- Link to CSS -->
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <!-- Particle Background -->
     <div id="particles-js"></div>
 
     <header>
-      <h1>Car Price Estimator</h1>
-      <button id="darkModeToggle" aria-label="Toggle Dark Mode">🌙</button>
+      <!-- Container for header items -->
+      <div class="header-container">
+        <h1>Car Price Estimator</h1>
+        <!-- Search icon button with inline SVG -->
+        <button id="searchIcon" aria-label="Search for car details">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#00ffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <button id="darkModeToggle" aria-label="Toggle Dark Mode">🌙</button>
+      </div>
     </header>
+
     <main>
       <div class="progress-bar">
         <div class="progress" id="progress"></div>
@@ -31,9 +44,7 @@
           <div id="step1" class="step active">
             <h2>Step 1: Choose Brand</h2>
             <div class="form-group">
-              <label for="brand" data-tooltip="Select your car's brand"
-                >Brand</label
-              >
+              <label for="brand" data-tooltip="Select your car's brand">Brand</label>
               <select id="brand" name="brand">
                 <option value="" disabled selected>-- Select Brand --</option>
               </select>
@@ -41,22 +52,17 @@
             <button type="button" id="nextStep1" disabled>Next</button>
           </div>
 
-          <!-- Step 2: Model (Optional) -->
+          <!-- Step 2: Model (Required) -->
           <div id="step2" class="step">
-            <h2>Step 2: Choose Model (Optional)</h2>
+            <h2>Step 2: Choose Model</h2>
             <div class="form-group">
-              <label
-                for="model"
-                data-tooltip="Select your car's model (optional)"
-                >Model</label
-              >
+              <label for="model" data-tooltip="Select your car's model">Model</label>
               <select id="model" name="model">
                 <option value="" disabled selected>-- Select Model --</option>
-                <option value="none">Not specify</option>
               </select>
             </div>
             <button type="button" id="prevStep2">Previous</button>
-            <button type="button" id="nextStep2">Next</button>
+            <button type="button" id="nextStep2" disabled>Next</button>
           </div>
 
           <!-- Step 3: Additional Filters -->
@@ -66,61 +72,40 @@
             <fieldset>
               <legend>Basic Information</legend>
               <div class="form-group">
-                <label for="year" data-tooltip="Select the manufacturing year"
-                  >Year</label
-                >
+                <label for="year" data-tooltip="Select the manufacturing year">Year</label>
                 <select id="year" name="year">
                   <option value="" disabled selected>-- Select Year --</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="fuel_type" data-tooltip="Choose the fuel type"
-                  >Fuel Type</label
-                >
+                <label for="fuel_type" data-tooltip="Choose the fuel type">Fuel Type</label>
                 <select id="fuel_type" name="fuel_type">
-                  <option value="" disabled selected>
-                    -- Select Fuel Type --
-                  </option>
+                  <option value="" disabled selected>-- Select Fuel Type --</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="hand_num" data-tooltip="Select the hand number"
-                  >Hand Number</label
-                >
+                <label for="hand_num" data-tooltip="Select the hand number">Hand Number</label>
                 <select id="hand_num" name="hand_num">
-                  <option value="" disabled selected>
-                    -- Select Hand Number --
-                  </option>
+                  <option value="" disabled selected>-- Select Hand Number --</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="brand_group" data-tooltip="Choose the brand group"
-                  >Brand Group</label
-                >
+                <label for="brand_group" data-tooltip="Choose the brand group">Brand Group</label>
                 <select id="brand_group" name="brand_group">
-                  <option value="" disabled selected>
-                    -- Select Brand Group --
-                  </option>
+                  <option value="" disabled selected>-- Select Brand Group --</option>
                 </select>
               </div>
             </fieldset>
 
             <!-- Optional Features (collapsible) -->
             <fieldset id="optionalFeatures" class="collapsible">
-              <legend
-                class="collapsible-legend"
-                data-tooltip="Click to toggle additional features"
-              >
+              <legend class="collapsible-legend" data-tooltip="Click to toggle additional features">
                 Optional Features
                 <span class="arrow"></span>
               </legend>
               <div class="collapsible-content">
                 <div class="form-group">
-                  <label
-                    for="magnesium_wheels"
-                    data-tooltip="Does it have magnesium wheels?"
-                    >Magnesium Wheels</label
-                  >
+                  <label for="magnesium_wheels" data-tooltip="Does it have magnesium wheels?">Magnesium Wheels</label>
                   <select id="magnesium_wheels" name="magnesium_wheels">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
@@ -128,11 +113,7 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label
-                    for="distance_control"
-                    data-tooltip="Does it include distance control?"
-                    >Distance Control</label
-                  >
+                  <label for="distance_control" data-tooltip="Does it include distance control?">Distance Control</label>
                   <select id="distance_control" name="distance_control">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
@@ -140,9 +121,7 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="economical" data-tooltip="Is it economical?"
-                    >Economical</label
-                  >
+                  <label for="economical" data-tooltip="Is it economical?">Economical</label>
                   <select id="economical" name="economical">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
@@ -150,26 +129,15 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label
-                    for="adaptive_cruise_control"
-                    data-tooltip="Does it have adaptive cruise control?"
-                    >Adaptive Cruise Control</label
-                  >
-                  <select
-                    id="adaptive_cruise_control"
-                    name="adaptive_cruise_control"
-                  >
+                  <label for="adaptive_cruise_control" data-tooltip="Does it have adaptive cruise control?">Adaptive Cruise Control</label>
+                  <select id="adaptive_cruise_control" name="adaptive_cruise_control">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
                     <option value="0">No</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label
-                    for="cruise_control"
-                    data-tooltip="Does it have cruise control?"
-                    >Cruise Control</label
-                  >
+                  <label for="cruise_control" data-tooltip="Does it have cruise control?">Cruise Control</label>
                   <select id="cruise_control" name="cruise_control">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
@@ -177,11 +145,7 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label
-                    for="four_wheel_drive"
-                    data-tooltip="Is it four wheel drive?"
-                    >Four Wheel Drive</label
-                  >
+                  <label for="four_wheel_drive" data-tooltip="Is it four wheel drive?">Four Wheel Drive</label>
                   <select id="four_wheel_drive" name="four_wheel_drive">
                     <option value="" disabled selected>-- Select --</option>
                     <option value="1">Yes</option>
@@ -193,87 +157,52 @@
 
             <!-- Performance Specifications (collapsible) -->
             <fieldset id="performanceSpecs" class="collapsible">
-              <legend
-                class="collapsible-legend"
-                data-tooltip="Click to toggle performance specs"
-              >
+              <legend class="collapsible-legend" data-tooltip="Click to toggle performance specs">
                 Performance Specifications
                 <span class="arrow"></span>
               </legend>
               <div class="collapsible-content">
                 <div class="form-group">
-                  <label
-                    for="min_horse_power"
-                    data-tooltip="Minimum horse power"
-                    >Min Horse Power</label
-                  >
-                  <input
-                    type="number"
-                    id="min_horse_power"
-                    name="min_horse_power"
-                    placeholder="e.g., 80"
-                  />
+                  <label for="min_horse_power" data-tooltip="Minimum horse power">Min Horse Power</label>
+                  <input type="number" id="min_horse_power" name="min_horse_power" placeholder="e.g., 80" />
                 </div>
                 <div class="form-group">
-                  <label
-                    for="max_horse_power"
-                    data-tooltip="Maximum horse power"
-                    >Max Horse Power</label
-                  >
-                  <input
-                    type="number"
-                    id="max_horse_power"
-                    name="max_horse_power"
-                    placeholder="e.g., 400"
-                  />
+                  <label for="max_horse_power" data-tooltip="Maximum horse power">Max Horse Power</label>
+                  <input type="number" id="max_horse_power" name="max_horse_power" placeholder="e.g., 400" />
                 </div>
                 <div class="form-group">
-                  <label
-                    for="min_engine_volume"
-                    data-tooltip="Minimum engine volume"
-                    >Min Engine Volume</label
-                  >
-                  <input
-                    type="number"
-                    step="0.1"
-                    id="min_engine_volume"
-                    name="min_engine_volume"
-                    placeholder="e.g., 1.0"
-                  />
+                  <label for="min_engine_volume" data-tooltip="Minimum engine volume">Min Engine Volume</label>
+                  <input type="number" step="0.1" id="min_engine_volume" name="min_engine_volume" placeholder="e.g., 1.0" />
                 </div>
                 <div class="form-group">
-                  <label
-                    for="max_engine_volume"
-                    data-tooltip="Maximum engine volume"
-                    >Max Engine Volume</label
-                  >
-                  <input
-                    type="number"
-                    step="0.1"
-                    id="max_engine_volume"
-                    name="max_engine_volume"
-                    placeholder="e.g., 6.0"
-                  />
+                  <label for="max_engine_volume" data-tooltip="Maximum engine volume">Max Engine Volume</label>
+                  <input type="number" step="0.1" id="max_engine_volume" name="max_engine_volume" placeholder="e.g., 6.0" />
                 </div>
               </div>
             </fieldset>
 
             <button type="button" id="prevStep3">Previous</button>
-            <button
-              type="button"
-              id="estimateBtn"
-              data-tooltip="Click to get estimated price"
-            >
-              Price Estimate
-            </button>
+            <button type="button" id="estimateBtn" data-tooltip="Click to get average price">Average Price</button>
           </div>
         </form>
       </div>
-      <!-- Modal for Price Estimate -->
-      <div id="priceEstimate" class="result" style="display: none"></div>
+      <!-- Inline container for Average Price Result -->
+      <div id="priceEstimate" style="display: none;"></div>
+      <!-- Container for Yearly Average Comparison Chart with neon frame -->
+      <div id="yearlyChartContainer" class="chart-container" style="display: none;">
+        <canvas id="yearlyChart"></canvas>
+      </div>
     </main>
 
-    <!-- Chat Assistant Button & Panel -->
+    <!-- Graph Modal for Detailed Price Breakdown (unchanged) -->
+    <div id="graphModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <canvas id="priceChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chat Assistant Panel -->
     <div id="chatButton" class="chat-button" data-tooltip="Chat with us">
       Chat Assistant
     </div>
@@ -286,6 +215,34 @@
         <p>Hello! How can I help you with your car estimate?</p>
       </div>
       <input type="text" id="chatInput" placeholder="Type your message..." />
+    </div>
+
+    <!-- Search Modal for Natural Language Queries -->
+    <div id="searchModal" class="modal" style="display: none;">
+      <div class="modal-content search-modal-content">
+        <span class="close" id="closeSearchModal">&times;</span>
+        <h2>Search Car Details</h2>
+        <div class="search-input-container">
+          <input type="text" id="searchQueryInput" placeholder="Type your query here..." />
+          <button id="voiceSearchButton" aria-label="Voice Search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#00ffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic">
+              <path d="M12 1v11"></path>
+              <path d="M8 5v6"></path>
+              <path d="M16 5v6"></path>
+              <path d="M5 12h14"></path>
+            </svg>
+          </button>
+        </div>
+        <div id="searchSuggestions" class="suggestions"></div>
+        <button id="searchSubmit">Search</button>
+        <div id="searchResults" class="search-results">
+          <div id="searchTextResult"></div>
+          <!-- Wrapped search chart in a neon framed container -->
+          <div id="searchChartContainer" class="chart-container" style="display: none;">
+            <canvas id="searchChart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Include Particles.js from CDN -->
