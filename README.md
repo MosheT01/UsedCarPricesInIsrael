@@ -1,4 +1,5 @@
 [![Deploy Backend to AWS EKS](https://github.com/MosheT01/UsedCarPricesInIsrael/actions/workflows/backend-deploy.yml/badge.svg)](https://github.com/MosheT01/UsedCarPricesInIsrael/actions/workflows/backend-deploy.yml)
+[![Deploy Frontend to AWS S3 & CloudFront](https://github.com/MosheT01/UsedCarPricesInIsrael/actions/workflows/deploy-frontend.yml/badge.svg)](https://github.com/MosheT01/UsedCarPricesInIsrael/actions/workflows/deploy-frontend.yml)
 # UsedCarPricesInIsrael
 
 ## 📌 Project Overview
