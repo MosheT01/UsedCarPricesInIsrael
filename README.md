@@ -99,7 +99,7 @@ The pipeline will automatically deploy the latest backend version.
 - [x] LoadBalancer setup for external access.
 - [x] GitHub Actions CI/CD pipeline configured.
 - [x] Frontend development in progress.
-- [ ] Static content deployment to AWS S3 & CloudFront.
+- [x] Static content deployment to AWS S3 & CloudFront.
 
 ---
 ## 🤝 Contributing
