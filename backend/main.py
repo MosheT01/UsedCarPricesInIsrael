@@ -223,3 +223,36 @@ def average_price_yearly(
     if not rows:
         return {"message": "No data found for the selected car brand and model."}
     return {"data": rows}                         # Return the yearly averages
+
+# New endpoint to handle combined search queries for car details
+@app.get("/api/search-car")
+def search_car(brand: str = Query(...), model: str = Query(...)):
+    """
+    Returns detailed car data including estimated price range and yearly average prices
+    for the specified car brand and model.
+    """
+    conn = get_db_connection()                  # Get database connection
+    cursor = conn.cursor(dictionary=True)       # Create a cursor that returns dictionaries
+
+    # Get estimated price range for the car
+    query_estimate = "SELECT MIN(price) AS min_price, MAX(price) AS max_price FROM cars WHERE brand = %s AND model = %s"
+    cursor.execute(query_estimate, (brand, model))
+    estimate = cursor.fetchone()
+
+    # Get yearly average prices for the car
+    query_yearly = "SELECT year, AVG(price) as avg_price FROM cars WHERE brand = %s AND model = %s GROUP BY year ORDER BY year"
+    cursor.execute(query_yearly, (brand, model))
+    yearly = cursor.fetchall()
+
+    cursor.close()                              # Close the cursor
+    conn.close()                                # Close the database connection
+
+    # If no matching car is found, return a message
+    if estimate["min_price"] is None or estimate["max_price"] is None:
+        return {"message": "No cars found matching the criteria."}
+
+    # Return both estimate and yearly data
+    return {
+        "estimate": estimate,
+        "yearly": yearly
+    }
