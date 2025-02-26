@@ -270,3 +270,32 @@ def average_price(
 
     return {"average_price": result["average_price"]}
 
+# --- Appended Code for Average Price Yearly Endpoint ---
+@app.get("/api/average-price-yearly")
+def average_price_yearly(
+    brand: str = Query(...),  # Require brand parameter
+    model: str = Query(...)   # Require model parameter
+):
+    """
+    Returns the average price for each year for the selected brand and model.
+    """
+    conn = get_db_connection()  # Get a database connection
+    cursor = conn.cursor(dictionary=True)  # Create a cursor that returns dictionaries
+
+    # SQL query: group by year and calculate average price for the given brand and model
+    query = """
+        SELECT year, AVG(price) as avg_price 
+        FROM cars
+        WHERE brand = %s AND model = %s
+        GROUP BY year
+        ORDER BY year
+    """
+    cursor.execute(query, (brand, model))  # Execute the query with the provided brand and model
+    rows = cursor.fetchall()  # Fetch all resulting rows
+
+    cursor.close()  # Close the cursor
+    conn.close()  # Close the connection
+
+    if not rows:
+        return {"message": "No data found for the selected brand and model."}
+    return {"data": rows}  # Return the yearly average prices as JSON
