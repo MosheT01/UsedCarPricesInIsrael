@@ -1,43 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" /> <!-- Set charset -->
-    <meta name="viewport" content="width=device-width, initial-scale=1" /> <!-- Responsive design -->
-    <title>Car Price Estimator - Futuristic UI</title>
+    <meta charset="UTF-8" /> <!-- Sets character encoding to UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" /> <!-- Makes the page responsive -->
+    <title>Car Price Estimator - Futuristic UI</title> <!-- Page title -->
+
     <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Orbitron:wght@400;700&display=swap"
       rel="stylesheet"
-    />
+    /> <!-- Imports fonts -->
+
     <!-- Link to CSS -->
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="styles.css" /> <!-- Links external CSS file -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" /> <!-- Favicon -->
+
     <!-- Chart.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- For displaying charts -->
   </head>
   <body>
     <!-- Particle Background -->
-    <div id="particles-js"></div>
+    <div id="particles-js"></div> <!-- Canvas for particle background -->
 
     <header>
-      <!-- Container for header items -->
       <div class="header-container">
-        <h1>Car Price Estimator</h1>
+        <h1>Car Price Estimator</h1> <!-- Main title -->
+
         <!-- Search icon button with inline SVG -->
         <button id="searchIcon" aria-label="Search for car details">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#00ffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="#00ffff"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-search"
+          >
+            <circle cx="11" cy="11" r="8"></circle> <!-- Outer circle of the search icon -->
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line> <!-- Magnifying glass handle line -->
           </svg>
         </button>
-        <button id="darkModeToggle" aria-label="Toggle Dark Mode">🌙</button>
+
+        <!-- Dark mode toggle -->
+        <button id="darkModeToggle" aria-label="Toggle Dark Mode"></button>
       </div>
     </header>
 
     <main>
       <div class="progress-bar">
-        <div class="progress" id="progress"></div>
+        <div class="progress" id="progress"></div> <!-- Progress fill -->
       </div>
+
       <div class="card">
         <form id="filterForm">
           <!-- Step 1: Brand -->
@@ -45,7 +61,7 @@
             <h2>Step 1: Choose Brand</h2>
             <div class="form-group">
               <label for="brand" data-tooltip="Select your car's brand">Brand</label>
-              <select id="brand" name="brand">
+              <select id="brand" name="brand" required>
                 <option value="" disabled selected>-- Select Brand --</option>
               </select>
             </div>
@@ -57,7 +73,7 @@
             <h2>Step 2: Choose Model</h2>
             <div class="form-group">
               <label for="model" data-tooltip="Select your car's model">Model</label>
-              <select id="model" name="model">
+              <select id="model" name="model" required>
                 <option value="" disabled selected>-- Select Model --</option>
               </select>
             </div>
@@ -68,6 +84,7 @@
           <!-- Step 3: Additional Filters -->
           <div id="step3" class="step">
             <h2>Step 3: Additional Filters</h2>
+
             <!-- Basic Information -->
             <fieldset>
               <legend>Basic Information</legend>
@@ -164,19 +181,41 @@
               <div class="collapsible-content">
                 <div class="form-group">
                   <label for="min_horse_power" data-tooltip="Minimum horse power">Min Horse Power</label>
-                  <input type="number" id="min_horse_power" name="min_horse_power" placeholder="e.g., 80" />
+                  <input
+                    type="number"
+                    id="min_horse_power"
+                    name="min_horse_power"
+                    placeholder="e.g., 80"
+                  />
                 </div>
                 <div class="form-group">
                   <label for="max_horse_power" data-tooltip="Maximum horse power">Max Horse Power</label>
-                  <input type="number" id="max_horse_power" name="max_horse_power" placeholder="e.g., 400" />
+                  <input
+                    type="number"
+                    id="max_horse_power"
+                    name="max_horse_power"
+                    placeholder="e.g., 400"
+                  />
                 </div>
                 <div class="form-group">
                   <label for="min_engine_volume" data-tooltip="Minimum engine volume">Min Engine Volume</label>
-                  <input type="number" step="0.1" id="min_engine_volume" name="min_engine_volume" placeholder="e.g., 1.0" />
+                  <input
+                    type="number"
+                    step="0.1"
+                    id="min_engine_volume"
+                    name="min_engine_volume"
+                    placeholder="e.g., 1.0"
+                  />
                 </div>
                 <div class="form-group">
                   <label for="max_engine_volume" data-tooltip="Maximum engine volume">Max Engine Volume</label>
-                  <input type="number" step="0.1" id="max_engine_volume" name="max_engine_volume" placeholder="e.g., 6.0" />
+                  <input
+                    type="number"
+                    step="0.1"
+                    id="max_engine_volume"
+                    name="max_engine_volume"
+                    placeholder="e.g., 6.0"
+                  />
                 </div>
               </div>
             </fieldset>
@@ -186,19 +225,18 @@
           </div>
         </form>
       </div>
-      <!-- Inline container for Average Price Result -->
-      <div id="priceEstimate" style="display: none;"></div>
-      <!-- Container for Yearly Average Comparison Chart with neon frame -->
+
+      <div id="priceEstimate" style="display: none;"></div> <!-- Shows the price estimate -->
       <div id="yearlyChartContainer" class="chart-container" style="display: none;">
-        <canvas id="yearlyChart"></canvas>
+        <canvas id="yearlyChart"></canvas> <!-- Chart for yearly data -->
       </div>
     </main>
 
-    <!-- Graph Modal for Detailed Price Breakdown (unchanged) -->
+    <!-- Graph Modal for Detailed Price Breakdown -->
     <div id="graphModal" class="modal" style="display: none;">
       <div class="modal-content">
         <span class="close">&times;</span>
-        <canvas id="priceChart"></canvas>
+        <canvas id="priceChart"></canvas> <!-- Modal chart -->
       </div>
     </div>
 
@@ -225,7 +263,17 @@
         <div class="search-input-container">
           <input type="text" id="searchQueryInput" placeholder="Type your query here..." />
           <button id="voiceSearchButton" aria-label="Voice Search">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#00ffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="#00ffff"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-mic"
+            >
               <path d="M12 1v11"></path>
               <path d="M8 5v6"></path>
               <path d="M16 5v6"></path>
@@ -237,17 +285,17 @@
         <button id="searchSubmit">Search</button>
         <div id="searchResults" class="search-results">
           <div id="searchTextResult"></div>
-          <!-- Wrapped search chart in a neon framed container -->
           <div id="searchChartContainer" class="chart-container" style="display: none;">
-            <canvas id="searchChart"></canvas>
+            <canvas id="searchChart"></canvas> <!-- Chart for search data -->
           </div>
         </div>
       </div>
     </div>
 
     <!-- Include Particles.js from CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script> <!-- For particle background -->
+
     <!-- Link to JS -->
-    <script src="script.js"></script>
+    <script src="script.js"></script> <!-- Main JS file -->
   </body>
 </html>
