@@ -195,3 +195,64 @@ async def catch_all(request: Request):
 
 #     response = await call_next(request)
 #     return response
+# --- Appended Code for Yearly Average Price Endpoint ---
+@app.get("/api/average-price-yearly")
+def average_price_yearly(
+    brand: str = Query(...),  # Require brand parameter
+    model: str = Query(...)   # Require model parameter
+):
+    """
+    Returns the average price for each year for the selected car brand and model.
+    """
+    conn = get_db_connection()                  # Get database connection
+    cursor = conn.cursor(dictionary=True)       # Create cursor for dict results
+
+    # SQL: Group by year for the chosen brand and model
+    query = """
+        SELECT year, AVG(price) as avg_price
+        FROM cars
+        WHERE brand = %s AND model = %s
+        GROUP BY year
+        ORDER BY year
+    """
+    cursor.execute(query, (brand, model))        # Execute query with brand and model
+    rows = cursor.fetchall()                      # Fetch all rows
+    cursor.close()                                # Close cursor
+    conn.close()                                  # Close connection
+
+    if not rows:
+        return {"message": "No data found for the selected car brand and model."}
+    return {"data": rows}                         # Return the yearly averages
+
+# New endpoint to handle combined search queries for car details
+@app.get("/api/search-car")
+def search_car(brand: str = Query(...), model: str = Query(...)):
+    """
+    Returns detailed car data including estimated price range and yearly average prices
+    for the specified car brand and model.
+    """
+    conn = get_db_connection()                  # Get database connection
+    cursor = conn.cursor(dictionary=True)       # Create a cursor that returns dictionaries
+
+    # Get estimated price range for the car
+    query_estimate = "SELECT MIN(price) AS min_price, MAX(price) AS max_price FROM cars WHERE brand = %s AND model = %s"
+    cursor.execute(query_estimate, (brand, model))
+    estimate = cursor.fetchone()
+
+    # Get yearly average prices for the car
+    query_yearly = "SELECT year, AVG(price) as avg_price FROM cars WHERE brand = %s AND model = %s GROUP BY year ORDER BY year"
+    cursor.execute(query_yearly, (brand, model))
+    yearly = cursor.fetchall()
+
+    cursor.close()                              # Close the cursor
+    conn.close()                                # Close the database connection
+
+    # If no matching car is found, return a message
+    if estimate["min_price"] is None or estimate["max_price"] is None:
+        return {"message": "No cars found matching the criteria."}
+
+    # Return both estimate and yearly data
+    return {
+        "estimate": estimate,
+        "yearly": yearly
+    }
