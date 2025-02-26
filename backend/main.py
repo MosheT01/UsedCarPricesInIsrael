@@ -195,6 +195,8 @@ async def catch_all(request: Request):
 
 #     response = await call_next(request)
 #     return response
+
+
 # --- Appended Code for Yearly Average Price Endpoint ---
 @app.get("/api/average-price-yearly")
 def average_price_yearly(
