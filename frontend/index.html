@@ -12,15 +12,37 @@
     <!-- Link to CSS -->
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <!-- Particle Background -->
     <div id="particles-js"></div>
 
     <header>
-      <h1>Car Price Estimator</h1>
-      <button id="darkModeToggle" aria-label="Toggle Dark Mode">🌙</button>
+      <div class="header-container">
+        <h1>Car Price Estimator</h1>
+        <!-- Search icon button with inline SVG -->
+        <button id="searchIcon" aria-label="Search for car details">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="#00ffff"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-search"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <button id="darkModeToggle" aria-label="Toggle Dark Mode"></button>
+      </div>
     </header>
+
     <main>
       <div class="progress-bar">
         <div class="progress" id="progress"></div>
@@ -34,29 +56,26 @@
               <label for="brand" data-tooltip="Select your car's brand"
                 >Brand</label
               >
-              <select id="brand" name="brand">
+              <select id="brand" name="brand" required>
                 <option value="" disabled selected>-- Select Brand --</option>
               </select>
             </div>
             <button type="button" id="nextStep1" disabled>Next</button>
           </div>
 
-          <!-- Step 2: Model (Optional) -->
+          <!-- Step 2: Model (Required) -->
           <div id="step2" class="step">
-            <h2>Step 2: Choose Model (Optional)</h2>
+            <h2>Step 2: Choose Model</h2>
             <div class="form-group">
-              <label
-                for="model"
-                data-tooltip="Select your car's model (optional)"
+              <label for="model" data-tooltip="Select your car's model"
                 >Model</label
               >
-              <select id="model" name="model">
+              <select id="model" name="model" required>
                 <option value="" disabled selected>-- Select Model --</option>
-                <option value="none">Not specify</option>
               </select>
             </div>
             <button type="button" id="prevStep2">Previous</button>
-            <button type="button" id="nextStep2">Next</button>
+            <button type="button" id="nextStep2" disabled>Next</button>
           </div>
 
           <!-- Step 3: Additional Filters -->
@@ -262,18 +281,32 @@
             <button
               type="button"
               id="estimateBtn"
-              data-tooltip="Click to get estimated price"
+              data-tooltip="Click to get average price"
             >
-              Price Estimate
+              Estimate Price
             </button>
           </div>
         </form>
       </div>
-      <!-- Modal for Price Estimate -->
-      <div id="priceEstimate" class="result" style="display: none"></div>
+      <div id="priceEstimate" style="display: none"></div>
+      <div
+        id="yearlyChartContainer"
+        class="chart-container"
+        style="display: none"
+      >
+        <canvas id="yearlyChart"></canvas>
+      </div>
     </main>
 
-    <!-- Chat Assistant Button & Panel -->
+    <!-- Graph Modal for Detailed Price Breakdown -->
+    <div id="graphModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <canvas id="priceChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chat Assistant Panel -->
     <div id="chatButton" class="chat-button" data-tooltip="Chat with us">
       Chat Assistant
     </div>
@@ -286,6 +319,54 @@
         <p>Hello! How can I help you with your car estimate?</p>
       </div>
       <input type="text" id="chatInput" placeholder="Type your message..." />
+    </div>
+
+    <!-- Search Modal for Natural Language Queries -->
+    <div id="searchModal" class="modal" style="display: none">
+      <div class="modal-content search-modal-content">
+        <span class="close" id="closeSearchModal">&times;</span>
+        <h2>Search Car Details</h2>
+        <div class="search-input-container">
+          <input
+            type="text"
+            id="searchQueryInput"
+            placeholder="Type your query here..."
+          />
+          <!-- Updated microphone icon -->
+          <button id="voiceSearchButton" aria-label="Voice Search">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="#00ffff"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-mic"
+            >
+              <path
+                d="M12 1C10.343 1 9 2.343 9 4v8c0 1.657 1.343 3 3 3s3-1.343 3-3V4c0-1.657-1.343-3-3-3z"
+              />
+              <path d="M19 10v2c0 3.314-2.686 6-6 6s-6-2.686-6-6v-2" />
+              <line x1="12" y1="19" x2="12" y2="23" />
+              <line x1="8" y1="23" x2="16" y2="23" />
+            </svg>
+          </button>
+        </div>
+        <div id="searchSuggestions" class="suggestions"></div>
+        <button id="searchSubmit">Search</button>
+        <div id="searchResults" class="search-results">
+          <div id="searchTextResult"></div>
+          <div
+            id="searchChartContainer"
+            class="chart-container"
+            style="display: none"
+          >
+            <canvas id="searchChart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Include Particles.js from CDN -->
